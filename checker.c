@@ -12,8 +12,51 @@
 
 #include "checker.h"
 
+void	add_to_end(t_args **head, int arg)
+{
+	t_args	*newnode;
+	t_args	*last;
+
+	newnode = (t_args*)ft_memalloc(sizeof(t_args));
+	last = (*head);
+	newnode->arg = arg;
+	if (*head == NULL)
+	{
+		newnode->prev = NULL;
+		(*head) = newnode;
+		return ;
+	}
+	while (last->next != NULL)
+		last = last->next;
+	last->next = newnode;
+	newnode->prev = last;
+}
+
+void	print_list(t_args *stack_a)
+{
+	while (stack_a)
+	{
+		printf("num: %d\n", stack_a->arg);
+		stack_a = stack_a->next;
+	}
+}
+
+void	get_list(t_args **stack_a, int num_args, char *arg_list[])
+{
+	int	i;
+
+	i = 0;
+	while (++i < num_args + 1)
+	{
+		add_to_end(stack_a, ft_atoi(arg_list[i]));
+	}
+}
+
 int	main(int argc, char *argv[])
 {
-	printf("ac: %d av: %s", argc, argv[0]);
+	t_args	*stack_a;
+	
+	get_list(&stack_a, argc - 1, argv);
+	print_list(stack_a);
 	return (0);
 }
