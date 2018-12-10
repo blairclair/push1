@@ -22,10 +22,4 @@ typedef struct  s_args
 }                   t_args;
 
 int                 is_safe(int argc, char *argv[]);
-void                rot_down(int *args, int num_args);
-void                ft_num_swap_individual(int *args, int pos);
-void                push_to_other(int *args_one, int *args_two,
-                    int num_args_one, int num_args_two);
-void                rot_up(int *args, int num_args);
-int                 *get_args(int *args, int num_args, char *arg_list[]);
 #endif

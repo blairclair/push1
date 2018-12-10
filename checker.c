@@ -55,7 +55,16 @@ void	get_list(t_args **stack_a, int num_args, char *arg_list[])
 int	main(int argc, char *argv[])
 {
 	t_args	*stack_a;
-	
+	int		check;
+
+	check = is_safe(argc, argv);
+	if (check == 0)
+		return (0);
+	else if (check == -1)
+	{
+		ft_putstr_fd("Error\n", 2);
+		return (0);
+	}
 	get_list(&stack_a, argc - 1, argv);
 	print_list(stack_a);
 	return (0);

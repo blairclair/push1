@@ -14,7 +14,8 @@ LIBFT=libft/libft.a
 PRINT=libft/printf_functions/libftprintf.a
 CC=gcc
 CFLAGS= -Wall -Wextra -Werror -g
-SRCS= checker.c
+SRCS= checker.c\
+check_param.c
 NAME=checker
 NAME2=push_swap
 
