@@ -23,13 +23,16 @@ void    rot_down(int *args, int num_args)
 }
 
 
-void    ft_num_swap_individual(int *args, int pos)
+void    ft_num_swap_individual(t_args **stack_ab)
 {
 	int temp;
 
-	temp = args[pos];
-	args[pos] = args[pos + 1];
-	args[pos + 1] = temp;
+	if (!(*stack_ab)->prev && (*stack_ab)->next)
+	{
+		temp = (*stack_ab)->arg;
+		(*stack_ab)->arg = (*stack_ab)->next->arg;
+		(*stack_ab)->next->arg = temp;
+	}
 }
 
 void    push_to_other(int *args_one, int *args_two,

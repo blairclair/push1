@@ -15,7 +15,8 @@ PRINT=libft/printf_functions/libftprintf.a
 CC=gcc
 CFLAGS= -Wall -Wextra -Werror -g
 SRCS= checker.c\
-check_param.c
+check_param.c\
+exec_swap.c
 NAME=checker
 NAME2=push_swap
 

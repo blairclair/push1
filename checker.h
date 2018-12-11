@@ -19,7 +19,9 @@ typedef struct  s_args
     int             arg;
     struct s_args   *next;
     struct s_args   *prev;
+    int             num_args;
 }                   t_args;
 
 int                 is_safe(int argc, char *argv[]);
+void                ft_num_swap_individual(t_args **stack_ab);
 #endif

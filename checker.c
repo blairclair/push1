@@ -12,7 +12,7 @@
 
 #include "checker.h"
 
-void	add_to_end(t_args **head, int arg)
+void	add_to_end(t_args **head, int arg, int num_args)
 {
 	t_args	*newnode;
 	t_args	*last;
@@ -20,6 +20,7 @@ void	add_to_end(t_args **head, int arg)
 	newnode = (t_args*)ft_memalloc(sizeof(t_args));
 	last = (*head);
 	newnode->arg = arg;
+	newnode->num_args = num_args;
 	if (*head == NULL)
 	{
 		newnode->prev = NULL;
@@ -32,12 +33,17 @@ void	add_to_end(t_args **head, int arg)
 	newnode->prev = last;
 }
 
-void	print_list(t_args *stack_a)
+void	print_list(t_args *stack_a, t_args *stack_b)
 {
 	while (stack_a)
 	{
-		printf("num: %d\n", stack_a->arg);
+		printf("a: %d\n", stack_a->arg);
 		stack_a = stack_a->next;
+	}
+	while (stack_b)
+	{
+		printf("b: %d\n", stack_b->arg);
+		stack_b = stack_b->next;
 	}
 }
 
@@ -48,7 +54,7 @@ void	get_list(t_args **stack_a, int num_args, char *arg_list[])
 	i = 0;
 	while (++i < num_args + 1)
 	{
-		add_to_end(stack_a, ft_atoi(arg_list[i]));
+		add_to_end(stack_a, ft_atoi(arg_list[i]), num_args);
 	}
 }
 
@@ -109,6 +115,18 @@ char *str, t_arg_nums *nums)
 	return (check == 1 ? 1 : 0);
 }*/
 
+int		sort_by_instructions(t_args **stack_a, t_args **stack_b, char *str)
+{
+		// printf("str: %s\n", str);
+	(*stack_b)->arg = 1;
+	if (!ft_strcmp(str, "sa") && *stack_b == NULL)
+	{
+		printf("hi\n");
+		ft_num_swap_individual(stack_a);
+	}
+	return (1);
+}
+
 int		check_if_sorted(t_args *stack_a)
 {
 	int	temp;
@@ -124,6 +142,21 @@ int		check_if_sorted(t_args *stack_a)
 	return (1);
 }
 
+int	check_instructions(t_args *stack_a, t_args *stack_b)
+{
+	char	*str;
+	int		ret;
+
+	str = ft_memalloc(5);
+	print_list(stack_a, stack_b);
+	while ((ret = read(1, str, 5) > 0))
+	{
+		str[ret + 1] = '\0';
+		sort_by_instructions(&stack_a, &stack_b, str);
+		print_list(stack_a, stack_b);
+	}
+	return (1);
+}
 /*
 int	*check_instructions(int *args_a, t_arg_nums *nums)
 {
@@ -154,9 +187,11 @@ int	*check_instructions(int *args_a, t_arg_nums *nums)
 int	main(int argc, char *argv[])
 {
 	t_args	*stack_a;
+	t_args	stack_b;
 	int		check;
 
 	check = is_safe(argc, argv);
+	stack_b.num_args = 0;
 	if (check == 0)
 		return (0);
 	else if (check == -1)
@@ -165,6 +200,7 @@ int	main(int argc, char *argv[])
 		return (0);
 	}
 	get_list(&stack_a, argc - 1, argv);
+	check_instructions(stack_a, &stack_b);
 	// print_list(stack_a);
 	if (check_if_sorted(stack_a))
 		printf("yes\n");
