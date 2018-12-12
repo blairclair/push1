@@ -35,19 +35,26 @@ void    ft_num_swap_individual(t_args **stack_ab)
 	}
 }
 
-void    push_to_other(int *args_one, int *args_two,
-int num_args_one, int num_args_two)
+void    push_to_other(t_args **stack_from, t_args *stack_to)
 {
 	int i;
 
 	i = 0;
+	while (*stack_from)
+		*stack_from = (*stack_from)->next;
+	while (*stack_from)
+	{
+		(*stack_from)->next->arg = (*stack_from)->arg;
+		*stack_from = (*stack_from)->prev;
+	}
+	/*
 	while (--num_args_one >= 0)
 		args_one[num_args_one + 1] = args_one[num_args_one];
 	args_one[0] = args_two[0];
 	i = -1;
 	while (++i < num_args_two)
 		args_two[i] = args_two[i + 1];
-	args_two[i] = '\0';
+	args_two[i] = '\0';*/
 }
 
 void    rot_up(int *args, int num_args)

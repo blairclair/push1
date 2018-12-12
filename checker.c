@@ -119,10 +119,11 @@ int		sort_by_instructions(t_args **stack_a, t_args **stack_b, char *str)
 {
 		// printf("str: %s\n", str);
 	(*stack_b)->arg = 1;
-	if (!ft_strcmp(str, "sa") && *stack_b == NULL)
-	{
-		printf("hi\n");
+	if (!ft_strcmp(str, "sa"))
 		ft_num_swap_individual(stack_a);
+	else if (!ft_strcmp(str, "pb"))
+	{
+		
 	}
 	return (1);
 }
