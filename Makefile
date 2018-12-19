@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 LIBFT=libft/libft.a
-PRINT=libft/printf_functions/libftprintf.a -fsanitize=address
+PRINT=libft/printf_functions/libftprintf.a
 CC=gcc
 CFLAGS= -Wall -Wextra -Werror -g
 SRCS= checker.c\

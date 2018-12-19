@@ -36,6 +36,23 @@ void    print_list(t_args *stack_a, t_args *stack_b)
     }
 }
 
+int		check_if_done(t_args *stack_a)
+{
+	int	temp;
+
+	while (stack_a)
+	{
+		if (!stack_a || !stack_a->next)
+			return (1);
+		if (stack_a->next != NULL)
+			temp = stack_a->next->arg;
+		if (temp < stack_a->arg)
+			return (0);
+		stack_a = stack_a->next;
+	}
+	return (1);
+}
+
 void	add_to_end(t_args **stack_ab, int num_args, int arg)
 {
 	t_args	*newnode;
@@ -74,15 +91,36 @@ void    swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 {
     if (!ft_strcmp(buf, "sa"))
         ft_num_swap_individual(stack_a);
-	else if (!ft_strcmp(buf, "ra"))
-		rot_up(stack_a);
-	else if (!ft_strcmp(buf, "rra"))
-        rot_down(stack_a);
+	else if (!ft_strcmp(buf, "sb"))
+		ft_num_swap_individual(stack_b);
+	else if (!ft_strcmp(buf, "ss"))
+	{
+		ft_num_swap_individual(stack_a);
+		ft_num_swap_individual(stack_b);
+	}
 	else if (!ft_strcmp(buf, "pb"))
 		push_to(stack_a, stack_b);
 	else if (!ft_strcmp(buf, "pa"))
 		push_to(stack_b, stack_a);
-    else
+	else if (!ft_strcmp(buf, "ra"))
+		rot_up(stack_a);
+	else if (!ft_strcmp(buf, "rb"))
+		rot_up(stack_b);
+	else if (!ft_strcmp(buf, "rr"))
+	{
+		rot_up(stack_a);
+		rot_up(stack_b);
+	}
+	else if (!ft_strcmp(buf, "rra"))
+        rot_down(stack_a);
+	else if (!ft_strcmp(buf, "rrb"))
+		rot_down(stack_b);
+	else if (!ft_strcmp(buf, "rrr"))
+	{
+		rot_down(stack_a);
+		rot_down(stack_b);
+	}
+	else
         ft_putstr_fd("Error\n", 2);
 }
 
@@ -106,6 +144,7 @@ int main(int argc, char *argv[])
     int     check;
 
 	stack_b = NULL;
+	stack_a = NULL;
     if ((check = is_safe(argc, argv)) <= 0)
     {
         if (check == -1)
@@ -114,5 +153,10 @@ int main(int argc, char *argv[])
     }
     init_stack_a(&stack_a, argc - 1, argv);
     get_input(stack_a, stack_b);
+	if (!stack_b && check_if_done(stack_a))
+		ft_printf("OK\n");
+	else
+		ft_printf("KO\n");
+	// sleep(30);
     return (0);
 }

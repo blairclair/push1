@@ -34,7 +34,8 @@ void delete_node(t_args **head, int n)
         pos->next->prev = pos->prev; 
     if (pos->prev != NULL) 
         pos->prev->next = pos->next; 
-    free(pos); 
+    free(pos);
+	pos = NULL;
 }
 
 void    rot_up(t_args **stack_ab)
@@ -102,9 +103,12 @@ void	push_to(t_args **stack_from, t_args **stack_to)
 	int	num_args;
 	int	arg;
 
-	if ((*stack_from)->num_args <= 0)
+	if (!(*stack_from) || (*stack_from)->num_args <= 0)
 		return ;
-	num_args = (*stack_from)->num_args + 1;
+	if ((*stack_to))
+		num_args = (*stack_to)->num_args + 1;
+	else
+		num_args = 1;
 	arg = (*stack_from)->arg;
 	add_to_beginning(stack_to, num_args, arg);
 	update_num_args(*stack_to, num_args);
