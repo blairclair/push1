@@ -11,52 +11,55 @@
 /* ************************************************************************** */
 
 #include "checker.h"
-
-void deleteNode(t_args **head_ref, t_args *del) 
-{ 
-    if (*head_ref == NULL || del == NULL) 
-        return; 
-    if (*head_ref == del) 
-        *head_ref = del->next; 
-    if (del->next != NULL) 
-        del->next->prev = del->prev; 
-    if (del->prev != NULL) 
-        del->prev->next = del->next; 
-    free(del); 
-} 
   
-void deleteNodeAtGivenPos(t_args **head_ref, int n) 
+void delete_node(t_args **head, int n) 
 { 
-    t_args  *current;
+    t_args  *pos;
     int     i;
 
     i = 1;
-    if (*head_ref == NULL || n <= 0) 
+    if (*head == NULL || n <= 0)
         return; 
-    current = *head_ref; 
-    while (current && i < n) 
+    pos = *head; 
+    while (pos && i < n) 
     {
-        current = current->next; 
+        pos = pos->next; 
         i++;
     }
-    if (current == NULL) 
+    if (pos == NULL) 
         return; 
-    deleteNode(head_ref, current); 
-} 
+    if (*head == pos)
+        *head = pos->next; 
+    if (pos->next != NULL) 
+        pos->next->prev = pos->prev; 
+    if (pos->prev != NULL) 
+        pos->prev->next = pos->next; 
+    free(pos); 
+}
 
+void    rot_up(t_args **stack_ab)
+{
+    int first_arg;
+    int num_args;
 
-void push(t_args** head_ref, int num_args, int arg) 
+    num_args = (*stack_ab)->num_args;
+    first_arg = (*stack_ab)->arg;
+    add_to_end(stack_ab, num_args, first_arg);
+    delete_node(stack_ab, 1);
+}
+
+void add_to_beginning(t_args **head, int num_args, int arg) 
 { 
     t_args *new_node;
     
-    new_node = (t_args*)malloc(sizeof(t_args)); 
+    new_node = (t_args*)ft_memalloc(sizeof(t_args)); 
     new_node->arg = arg; 
     new_node->num_args = num_args;
-    new_node->next = (*head_ref); 
+    new_node->next = (*head); 
     new_node->prev = NULL; 
-    if ((*head_ref) != NULL) 
-        (*head_ref)->prev = new_node; 
-    (*head_ref) = new_node; 
+    if ((*head) != NULL) 
+        (*head)->prev = new_node; 
+    (*head) = new_node; 
 }
 
 void    rot_down(t_args **stack_ab)
@@ -69,8 +72,8 @@ void    rot_down(t_args **stack_ab)
         (*stack_ab) = (*stack_ab)->next;
     last_arg = (*stack_ab)->arg;
     (*stack_ab) = head;
-    push(stack_ab, (*stack_ab)->num_args, last_arg);
-    deleteNodeAtGivenPos(stack_ab, (*stack_ab)->num_args + 1);
+    add_to_beginning(stack_ab, (*stack_ab)->num_args, last_arg);
+    delete_node(stack_ab, (*stack_ab)->num_args + 1);
 }
 
 void    ft_num_swap_individual(t_args **stack_ab)
@@ -85,3 +88,27 @@ void    ft_num_swap_individual(t_args **stack_ab)
     }
 }
 
+void	update_num_args(t_args *stack_ab, int new_num_args)
+{
+	while (stack_ab)
+	{
+		(stack_ab)->num_args = new_num_args;
+		(stack_ab) = (stack_ab)->next;
+	}
+}
+
+void	push_to(t_args **stack_from, t_args **stack_to)
+{
+	int	num_args;
+	int	arg;
+
+	if ((*stack_from)->num_args <= 0)
+		return ;
+	num_args = (*stack_from)->num_args + 1;
+	arg = (*stack_from)->arg;
+	add_to_beginning(stack_to, num_args, arg);
+	update_num_args(*stack_to, num_args);
+	num_args = (*stack_from)->num_args - 1;
+	delete_node(stack_from, 1);
+	update_num_args(*stack_from, num_args);
+}

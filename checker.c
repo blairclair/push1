@@ -17,18 +17,20 @@ void    print_list(t_args *stack_a, t_args *stack_b)
     ft_printf("stack a:\n");
     if (stack_a)
     {
+        printf("    num args: %d\n", stack_a->num_args);
         while (stack_a)
         {
-            printf("num_arg: %d num: %d\n", stack_a->num_args, stack_a->arg);
+            printf("%d\n", stack_a->arg);
             stack_a = stack_a->next;
         }
     }
-    ft_printf("stack b:\n");
+    ft_printf("\nstack b:\n");
     if (stack_b)
     {
+        printf("    num args: %d\n", stack_b->num_args);
         while (stack_b)
         {
-            printf("num_arg: %d num: %d\n", stack_b->num_args, stack_b->arg);
+            printf("%d\n", stack_b->arg);
             stack_b = stack_b->next;
         }
     }
@@ -70,11 +72,16 @@ void    init_stack_a(t_args **stack_a, int num_args, char *argv[])
 
 void    swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 {
-    (*stack_b)->arg = 1;
     if (!ft_strcmp(buf, "sa"))
         ft_num_swap_individual(stack_a);
-    else if (!ft_strcmp(buf, "rra"))
+	else if (!ft_strcmp(buf, "ra"))
+		rot_up(stack_a);
+	else if (!ft_strcmp(buf, "rra"))
         rot_down(stack_a);
+	else if (!ft_strcmp(buf, "pb"))
+		push_to(stack_a, stack_b);
+	else if (!ft_strcmp(buf, "pa"))
+		push_to(stack_b, stack_a);
     else
         ft_putstr_fd("Error\n", 2);
 }
@@ -95,9 +102,10 @@ void    get_input(t_args *stack_a, t_args *stack_b)
 int main(int argc, char *argv[])
 {
     t_args  *stack_a;
-    t_args  stack_b;
+    t_args  *stack_b;
     int     check;
 
+	stack_b = NULL;
     if ((check = is_safe(argc, argv)) <= 0)
     {
         if (check == -1)
@@ -105,6 +113,6 @@ int main(int argc, char *argv[])
         return (0);
     }
     init_stack_a(&stack_a, argc - 1, argv);
-    get_input(stack_a, &stack_b);
+    get_input(stack_a, stack_b);
     return (0);
 }

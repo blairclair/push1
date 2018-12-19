@@ -14,17 +14,20 @@
 # define CHECKER_H
 # include "libft/libft.h"
 
-typedef struct  s_args
+typedef struct		s_args
 {
-    int             num_args;
-    int             arg;
-    struct s_args   *next;
-    struct s_args   *prev;
-}                   t_args;
+    int				num_args;
+    int				arg;
+    struct s_args	*next;
+    struct s_args	*prev;
+}					t_args;
 
-int is_dup(int *dup_check, int num);
-int is_safe(int argc, char *argv[]);
-void ft_num_swap_individual(t_args **stack_ab);
-void    print_list(t_args *stack_a, t_args *stack_b);
-void    rot_down(t_args **stack_ab);
+int					is_dup(int *dup_check, int num);
+int					is_safe(int argc, char *argv[]);
+void				ft_num_swap_individual(t_args **stack_ab);
+void				print_list(t_args *stack_a, t_args *stack_b);
+void				rot_down(t_args **stack_ab);
+void				rot_up(t_args **stack_ab);
+void				add_to_end(t_args **stack_ab, int num_args, int arg);
+void				push_to(t_args **stack_from, t_args **stack_to);
 #endif
