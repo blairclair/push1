@@ -12,82 +12,7 @@
 
 #include "checker.h"
 
-void    print_list(t_args *stack_a, t_args *stack_b)
-{
-    ft_printf("stack a:\n");
-    if (stack_a)
-    {
-        printf("    num args: %d\n", stack_a->num_args);
-        while (stack_a)
-        {
-            printf("%d\n", stack_a->arg);
-            stack_a = stack_a->next;
-        }
-    }
-    ft_printf("\nstack b:\n");
-    if (stack_b)
-    {
-        printf("    num args: %d\n", stack_b->num_args);
-        while (stack_b)
-        {
-            printf("%d\n", stack_b->arg);
-            stack_b = stack_b->next;
-        }
-    }
-}
-
-int		check_if_done(t_args *stack_a)
-{
-	int	temp;
-
-	while (stack_a)
-	{
-		if (!stack_a || !stack_a->next)
-			return (1);
-		if (stack_a->next != NULL)
-			temp = stack_a->next->arg;
-		if (temp < stack_a->arg)
-			return (0);
-		stack_a = stack_a->next;
-	}
-	return (1);
-}
-
-void	add_to_end(t_args **stack_ab, int num_args, int arg)
-{
-	t_args	*newnode;
-	t_args	*last;
-
-	newnode = (t_args*)ft_memalloc(sizeof(t_args));
-	last = (*stack_ab);
-	newnode->num_args = num_args;
-	newnode->arg = arg;
-	newnode->next = NULL;
-	if (*stack_ab == NULL)
-	{
-		newnode->prev = NULL;
-		(*stack_ab) = newnode;
-		return ;
-	}
-	while (last->next != NULL)
-		last = last->next;
-	last->next = newnode;
-	newnode->prev = last;
-}
-
-void    init_stack_a(t_args **stack_a, int num_args, char *argv[])
-{
-    int i;
-
-    i = 1;
-    while (i < num_args +1)
-    {
-        add_to_end(stack_a, num_args, ft_atoi(argv[i]));
-        i++;
-    }
-}
-
-void    swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
+void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 {
     if (!ft_strcmp(buf, "sa"))
         ft_num_swap_individual(stack_a);
@@ -135,6 +60,10 @@ void    get_input(t_args *stack_a, t_args *stack_b)
         swap_cmds(buf, &stack_a, &stack_b);
         print_list(stack_a, stack_b);
     }
+	if (stack_b == NULL && check_if_done(stack_a))
+		ft_printf("OK\n");
+	else
+		ft_printf("KO\n");
 }
 
 int main(int argc, char *argv[])
@@ -153,10 +82,6 @@ int main(int argc, char *argv[])
     }
     init_stack_a(&stack_a, argc - 1, argv);
     get_input(stack_a, stack_b);
-	if (!stack_b && check_if_done(stack_a))
-		ft_printf("OK\n");
-	else
-		ft_printf("KO\n");
 	// sleep(30);
     return (0);
 }

@@ -16,7 +16,11 @@ CC=gcc
 CFLAGS= -Wall -Wextra -Werror -g
 SRCS= checker.c\
 check_params.c\
+utils.c\
 exec_swap.c
+SRCS2=push_swap.c\
+utils.c\
+check_params.c
 NAME=checker
 NAME2=push_swap
 
@@ -27,6 +31,7 @@ $(NAME): $(SRCS)
 	make -C libft/printf_functions/
 	$(CC) -c $(SRCS)
 	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) $(LIBFT) $(PRINT)
+	$(CC) $(CFLAGS) -o $(NAME2) $(SRCS2) $(LIBFT) $(PRINT)
 clean:
 	/bin/rm -f *.o
 	make -C libft/ clean

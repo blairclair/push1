@@ -43,6 +43,8 @@ void    rot_up(t_args **stack_ab)
     int first_arg;
     int num_args;
 
+	if ((*stack_ab) == NULL)
+		return ;
     num_args = (*stack_ab)->num_args;
     first_arg = (*stack_ab)->arg;
     add_to_end(stack_ab, num_args, first_arg);
@@ -68,6 +70,8 @@ void    rot_down(t_args **stack_ab)
     int last_arg;
     t_args  *head;
 
+	if ((*stack_ab) == NULL)
+		return ;
     head = (*stack_ab);
     while ((*stack_ab)->next)
         (*stack_ab) = (*stack_ab)->next;
