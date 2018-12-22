@@ -88,38 +88,38 @@ int	get_unsorted_pos(t_args *stack_a)//not zero based
 	return (i);
 }
 
-void	push_swap_simple(t_args *stack_a, t_args *stack_b)
+void	push_swap_simple(t_args **stack_a, t_args **stack_b)
 {
 	int	pos;
 	int	lowest;
 	int	highest;
 
-	pos = get_unsorted_pos(stack_a);
-	lowest = get_lowest_arg(stack_a, stack_b);
-	highest = get_highest_arg(stack_a, stack_b);
-	if (stack_a->arg == highest)
+	pos = get_unsorted_pos(*stack_a);
+	lowest = get_lowest_arg(*stack_a, *stack_b);
+	highest = get_highest_arg(*stack_a, *stack_b);
+	if ((*stack_a)->arg == highest)
 	{
-		ft_printf("ra\n");fdxgfd //run it its broken
-		rot_up(&stack_a);
+		ft_printf("ra\n");
+		rot_up(stack_a);
 	}
-	else if (pos == 2 && lowest == stack_a->next->arg)
+	else if (pos == 2 && lowest == (*stack_a)->next->arg)
 	{
 		ft_printf("sa\n");
-		ft_num_swap_individual(&stack_a);
+		ft_num_swap_individual(stack_a);
 	}
 //	stack_b = NULL;
 	
 }
 
-void	push_swap(t_args *stack_a, t_args *stack_b)
+t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 {
 	// if (stack_a->num_args <= 5)
 	// {
 		if (check_if_done(stack_a) && stack_b == NULL)
-			return ;
-		push_swap_simple(stack_a, stack_b);
+			return (stack_a);
+		push_swap_simple(&stack_a, &stack_b);
 	// }
-
+	return (stack_a);
 }
 
 int		main(int argc, char *argv[])
@@ -138,6 +138,6 @@ int		main(int argc, char *argv[])
     }
     init_stack_a(&stack_a, argc - 1, argv);
 	print_list(stack_a, stack_b);
-	push_swap(stack_a, stack_b);
+	stack_a = push_swap(stack_a, stack_b);
 	print_list(stack_a, stack_b);
 }
