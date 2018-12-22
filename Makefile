@@ -20,7 +20,8 @@ utils.c\
 exec_swap.c
 SRCS2=push_swap.c\
 utils.c\
-check_params.c
+check_params.c\
+exec_swap.c
 NAME=checker
 NAME2=push_swap
 
