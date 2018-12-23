@@ -274,9 +274,7 @@ void	push_swap_simple(t_args **stack_a, t_args **stack_b)
 	int	pos;
 	int	lowest;
 	int	highest;
-	int	i;//for testing only
 
-	i = 0;
 	while (1)
 	{
 		lowest = get_lowest_arg(*stack_a);
@@ -333,11 +331,7 @@ void	push_swap_simple(t_args **stack_a, t_args **stack_b)
 				rot_up(stack_a);
 			}
 		}
-		// if (i > 30)
-		// 	break; 
-		// i++;
 	}
-	//	stack_b = NULL;
 }
 
 t_args	*push_swap(t_args *stack_a, t_args *stack_b)

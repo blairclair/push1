@@ -44,7 +44,7 @@ int is_safe(int argc, char *argv[])
 	ret = 1;
 	if (argc < 2)
 		return (0);
-	if (ft_strlen(argv[1]) > 1)
+	if (ft_strlen(argv[1]) > 1 && is_ws(argv[1], 0))
 	{
 		str = ft_strsplit(argv[1], ' ');
 		ret = 3;
@@ -58,7 +58,6 @@ int is_safe(int argc, char *argv[])
 		num = ft_atol(str[i]);
 		if (!ft_isnumber(str[i]) || num > 2147483647 || num < -2147483648)
 		{
-			printf("ai: %s\n", str[i]);
 			free(dup_check);
 			return (-1);
 		}
