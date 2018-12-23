@@ -38,4 +38,5 @@ void				add_to_end(t_args **stack_ab, int num_args, int arg);
 int					check_if_done(t_args *stack_a);
 void				print_list(t_args *stack_a, t_args *stack_b);
 void				delete_node(t_args **head, int n);
+void				resort_stack_b(t_args **stack_a, t_args **stack_b);
 #endif

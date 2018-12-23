@@ -6,7 +6,7 @@
 /*   By: agrodzin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/19 15:06:10 by agrodzin          #+#    #+#             */
-/*   Updated: 2018/12/19 15:06:11 by agrodzin         ###   ########.fr       */
+/*   Updated: 2018/12/22 18:44:44 by agrodzin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,6 @@ int	get_unsorted_pos(t_args *stack_a)//not zero based
 	return (i);
 }
 
-int		merge_possible()
-{
-
-}
-
 int		pos_as_last_value(t_args *stack_a, int pos)
 {
 	int	arg;
@@ -92,7 +87,6 @@ int		pos_as_last_value(t_args *stack_a, int pos)
 		stack_a = stack_a->next;
 	if (arg > stack_a->arg)
 		return (1);
-	printf("arg: %d last: %d\n", arg, stack_a->arg);
 	return (0);
 }
 
@@ -111,17 +105,25 @@ void	make_pos_last_value(t_args **stack_a, t_args **stack_b, int pos)
 int		is_perfect_merge(t_args *stack_a, t_args *stack_b)
 {
 	int	temp;
+	int	first;
 
+	first = stack_a->arg;
 	while (stack_a)
 	{
 		if (!stack_a || !stack_a->next)
+		{
+			if (!stack_a->next)
+				temp = stack_a->arg;
 			break ;
+		}
 		if (stack_a->next != NULL)
 			temp = stack_a->next->arg;
 		if (temp < stack_a->arg)
 			return (0);
 		stack_a = stack_a->next;
 	}
+	if (stack_b->arg > first)
+		return (0);
 	while (stack_b->next)
 		stack_b = stack_b->next;
 	while (stack_b)
@@ -139,11 +141,9 @@ int		is_perfect_merge(t_args *stack_a, t_args *stack_b)
 
 void	do_merge(t_args **stack_a, t_args **stack_b)
 {
-	int	temp;
 	int	num_args;
-	
-	printf("merging\n\n");
-	num_args = 0;
+
+	num_args = 1;
 	while (((*stack_b)->next))
 	{
 		(*stack_b = (*stack_b)->next);
@@ -153,17 +153,16 @@ void	do_merge(t_args **stack_a, t_args **stack_b)
 		(*stack_b) = (*stack_b)->prev;
 	while (num_args > 0)
 	{
-		ft_printf("pb\n");
+		ft_printf("pa\n");
 		push_to(stack_b, stack_a);
-		stack_b = (*stack_b)->next;
+		if (*stack_b)
+			(*stack_b) = (*stack_b)->next;
 		num_args--;
 	}
 }
 
 int		last_as_first_value(t_args *stack_ab, int lowest)
 {
-	int	first;
-
 	while (stack_ab->next)
 		stack_ab = stack_ab->next;
 	if (stack_ab->arg == lowest)
@@ -175,6 +174,8 @@ int		check_stack_b(t_args *stack_b)
 {
 	int	temp;
 
+	if (!stack_b)
+		return (1);
 	while (stack_b)
 	{
 		if (!stack_b || !stack_b->next)
@@ -187,11 +188,6 @@ int		check_stack_b(t_args *stack_b)
 	}
 	return (1);
 }
-
-// int		is_b_last_t_first(t_args *stack_b, int lowest)
-// {
-// 	while (sta)
-// }
 
 void	make_merge_perfect(t_args **stack_a, t_args **stack_b)
 {
@@ -208,12 +204,9 @@ void	make_merge_perfect(t_args **stack_a, t_args **stack_b)
 			push_to(stack_a, stack_b);
 			lowest_a = get_lowest_arg(*stack_a);
 			highest_b = get_highest_arg(*stack_b);
+			resort_stack_b(stack_a, stack_b);
 			if (highest_b < lowest_a)
-			{
-				resort_stack_b(stack_b);
 				break ;
-			}
-
 		}
 	}
 }
@@ -237,20 +230,23 @@ void	resort_stack_b(t_args **stack_a, t_args **stack_b)
 		lowest = get_lowest_arg(*stack_b);
 		highest = get_highest_arg(*stack_b);
 		pos = get_unsorted_pos(*stack_b);
-		last = get_last_arg(stack_b);
+		last = get_last_arg(*stack_b);
 		if (check_stack_b(*stack_b))
 			break ;
-		else if ((*stack_b)->next && (*stack_b)->arg < (*stack_b)->next)
+		else if ((*stack_b)->next && (*stack_b)->arg < (*stack_b)->next->arg)
 		{
 			if (*stack_a && (*stack_a)->next && (*stack_a)->arg > (*stack_a)->next->arg)
 			{
 				ft_printf("ss\n");
 				ft_num_swap_individual(stack_a);
 			}
+			else
+				ft_printf("sb\n");
+			ft_num_swap_individual(stack_b);
 		}
 		else if (last > (*stack_b)->arg)
 		{
-			if ((*stack_a) && get_last_arg(stack_a) == get_lowest_arg(stack_a))
+			if ((*stack_a) && get_last_arg(*stack_a) == get_lowest_arg(*stack_a))
 			{
 				ft_printf("rrr\n");
 				rot_down(stack_a);
@@ -259,7 +255,17 @@ void	resort_stack_b(t_args **stack_a, t_args **stack_b)
 				ft_printf("rrb\n");
 			rot_down(stack_b);
 		}
-		else if ()
+		else if ((*stack_b) && (*stack_b)->arg == lowest)
+		{
+			if ((*stack_a) && (*stack_a)->arg == get_highest_arg(*stack_a))
+			{
+				ft_printf("rr\n");
+				rot_up(stack_a);
+			}
+			else
+				ft_printf("rb\n");
+			rot_up(stack_b);
+		}
 	}
 }
 
@@ -269,7 +275,6 @@ void	push_swap_simple(t_args **stack_a, t_args **stack_b)
 	int	lowest;
 	int	highest;
 	int	i;//for testing only
-	int	last;
 
 	i = 0;
 	while (1)
@@ -278,9 +283,7 @@ void	push_swap_simple(t_args **stack_a, t_args **stack_b)
 		highest = get_highest_arg(*stack_a);
 		pos = get_unsorted_pos(*stack_a);
 		if (!check_stack_b(*stack_b))
-		{
-			resort_stack_b();
-		}
+			resort_stack_b(stack_a, stack_b);
 		if (check_if_done(*stack_a) && (*stack_b) == NULL)
 			break ;
 		else if (check_if_done((*stack_a)) && (*stack_b))
@@ -290,15 +293,15 @@ void	push_swap_simple(t_args **stack_a, t_args **stack_b)
 				do_merge(stack_a, stack_b);
 				break ;
 			}
-			// else
-			// 	make_merge_perfect
+			else
+				make_merge_perfect(stack_a, stack_b);
 		}
 		else if ((*stack_a)->arg == highest)
 		{
 			ft_printf("ra\n");
 			rot_up(stack_a);
 		}
-		else if (last_as_first_value(stack_a, lowest))
+		else if (last_as_first_value(*stack_a, lowest))
 		{
 			ft_printf("rra\n");
 			rot_down(stack_a);
@@ -311,27 +314,39 @@ void	push_swap_simple(t_args **stack_a, t_args **stack_b)
 		else if (pos_as_last_value(*stack_a, pos))
 			make_pos_last_value(stack_a, stack_b, pos);
 		else if ((((*stack_a) && (*stack_b) && (*stack_a)->arg > (*stack_b)->arg
-		&& (*stack_a)->arg != lowest)) ||
-		((*stack_b) == NULL && (*stack_a)->arg != lowest))
+						&& (*stack_a)->arg != lowest)) ||
+				((*stack_b) == NULL && (*stack_a)->arg != lowest))
 		{
 			ft_printf("pb\n");
 			push_to(stack_a, stack_b);
 		}
-		print_list(*stack_a, *stack_b);
-		if (i > 30)
-			break; 
-		i++;
+		else
+		{
+			if (pos > 1)
+			{
+				ft_printf("pb\n");
+				push_to(stack_a, stack_b);
+			}
+			else
+			{
+				ft_printf("ra\n");
+				rot_up(stack_a);
+			}
+		}
+		// if (i > 30)
+		// 	break; 
+		// i++;
 	}
-//	stack_b = NULL;
+	//	stack_b = NULL;
 }
 
 t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 {
 	// if (stack_a->num_args <= 5)
 	// {
-		if (check_if_done(stack_a) && stack_b == NULL)
-			return (stack_a);
-		push_swap_simple(&stack_a, &stack_b);
+	if (check_if_done(stack_a) && stack_b == NULL)
+		return (stack_a);
+	push_swap_simple(&stack_a, &stack_b);
 	// }
 	return (stack_a);
 }
@@ -339,19 +354,17 @@ t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 int		main(int argc, char *argv[])
 {
 	t_args  *stack_a;
-    t_args  *stack_b;
-    int     check;
+	t_args  *stack_b;
+	int     check;
 
 	stack_b = NULL;
 	stack_a = NULL;
-    if ((check = is_safe(argc, argv)) <= 0)
-    {
-        if (check == -1)
-            ft_putstr_fd("Error\n", 2);
-        return (0);
-    }
-    init_stack_a(&stack_a, argc - 1, argv);
-	print_list(stack_a, stack_b);
+	if ((check = is_safe(argc, argv)) <= 0)
+	{
+		if (check == -1)
+			ft_putstr_fd("Error\n", 2);
+		return (0);
+	}
+	init_stack_a(&stack_a, argc - 1, argv);
 	stack_a = push_swap(stack_a, stack_b);
-	print_list(stack_a, stack_b);
 }
