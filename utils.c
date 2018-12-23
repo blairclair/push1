@@ -12,11 +12,8 @@
 
 #include "push_swap.h"
 
-void    init_stack_a(t_args **stack_a, int num_args, char *argv[])
+void    init_stack_a(t_args **stack_a, int num_args, char *argv[], int i)
 {
-    int i;
-
-    i = 1;
     while (i < num_args +1)
     {
         add_to_end(stack_a, num_args, ft_atoi(argv[i]));

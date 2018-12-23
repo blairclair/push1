@@ -104,4 +104,5 @@ int					is_ws(char *str, int i);
 void    			print_int_arr(int *num, int num_args);
 long long			ft_atol(const char *str);
 int   				ft_isnumber(char *str);
+int					count_num_2d_args(char **str);
 #endif

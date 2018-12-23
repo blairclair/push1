@@ -84,7 +84,8 @@ SRCS=ft_strtoupper.c\
 	 print_int_arr.c\
 	 ft_atol.c\
 	 ft_is_number.c\
-	 is_ws.c
+	 is_ws.c\
+	 count_num_2d_args.c
 NAME=libft.a
 LIB=ar rs
 OBJ=$(SRCS:%.c=%.o)

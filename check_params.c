@@ -30,24 +30,35 @@ int is_dup(int *dup_check, int num)
 	}
 	return (1);
 }
-fix the fact that the checker reads all the args in one 
-string in the way that they will test it re: corrections pdf
+// fix the fact that the checker reads all the args in one 
+// string in the way that they will test it re: corrections pdf
 int is_safe(int argc, char *argv[])
 {
 	int         i;
 	int         *dup_check;
 	long long   num;
+	char		**str;
+	int			ret;
 
 	i = 1;
+	ret = 1;
 	if (argc < 2)
 		return (0);
-	dup_check = ft_memalloc(argc * sizeof(int*) + 1);
-	while (argv[i])
+	if (ft_strlen(argv[1]) > 1)
 	{
-		num = ft_atol(argv[i]);
-		if (!ft_isnumber(argv[i]) || num > 2147483647 || num < -2147483648)
+		str = ft_strsplit(argv[1], ' ');
+		ret = 3;
+		i = 0;
+	}
+	else
+		str = argv;
+	dup_check = ft_memalloc(argc * sizeof(int*) + 1);
+	while (str[i])
+	{
+		num = ft_atol(str[i]);
+		if (!ft_isnumber(str[i]) || num > 2147483647 || num < -2147483648)
 		{
-			printf("ai: %s\n", argv[i]);
+			printf("ai: %s\n", str[i]);
 			free(dup_check);
 			return (-1);
 		}
@@ -57,6 +68,6 @@ int is_safe(int argc, char *argv[])
 		i++;
 	}
     free(dup_check);
-	return (1);
+	return (ret);
 }
 

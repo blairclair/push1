@@ -356,6 +356,7 @@ int		main(int argc, char *argv[])
 	t_args  *stack_a;
 	t_args  *stack_b;
 	int     check;
+	char	**str;
 
 	stack_b = NULL;
 	stack_a = NULL;
@@ -365,6 +366,12 @@ int		main(int argc, char *argv[])
 			ft_putstr_fd("Error\n", 2);
 		return (0);
 	}
-	init_stack_a(&stack_a, argc - 1, argv);
+	else if (check == 3)
+	{
+		str = ft_strsplit(argv[1], ' ');
+    	init_stack_a(&stack_a, count_num_2d_args(str) - 1, str, 0);
+	}
+	else
+		init_stack_a(&stack_a, argc - 1, argv, 1);
 	stack_a = push_swap(stack_a, stack_b);
 }
