@@ -77,8 +77,10 @@ int main(int argc, char *argv[])
     if ((check = is_safe(argc, argv)) <= 0)
     {
         if (check == -1)
+		{
             ft_putstr_fd("Error\n", 2);
-        return (0);
+		}
+		return (0);
     }
     init_stack_a(&stack_a, argc - 1, argv);
     get_input(stack_a, stack_b);

@@ -30,7 +30,8 @@ int is_dup(int *dup_check, int num)
 	}
 	return (1);
 }
-
+fix the fact that the checker reads all the args in one 
+string in the way that they will test it re: corrections pdf
 int is_safe(int argc, char *argv[])
 {
 	int         i;
@@ -46,6 +47,7 @@ int is_safe(int argc, char *argv[])
 		num = ft_atol(argv[i]);
 		if (!ft_isnumber(argv[i]) || num > 2147483647 || num < -2147483648)
 		{
+			printf("ai: %s\n", argv[i]);
 			free(dup_check);
 			return (-1);
 		}
