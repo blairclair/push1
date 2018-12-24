@@ -311,9 +311,9 @@ void	push_swap_simple(t_args **stack_a, t_args **stack_b)
 		}
 		else if (pos_as_last_value(*stack_a, pos))
 			make_pos_last_value(stack_a, stack_b, pos);
-		else if ((((*stack_a) && (*stack_b) && (*stack_a)->arg > (*stack_b)->arg
-						&& (*stack_a)->arg != lowest)) ||
-				((*stack_b) == NULL && (*stack_a)->arg != lowest))
+		else if ((((*stack_a) && (*stack_b) && (*stack_a)->arg >
+		(*stack_b)->arg && (*stack_a)->arg != lowest)) ||
+		((*stack_b) == NULL && (*stack_a)->arg != lowest))
 		{
 			ft_printf("pb\n");
 			push_to(stack_a, stack_b);
