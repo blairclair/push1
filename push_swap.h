@@ -11,3 +11,5 @@
 /* ************************************************************************** */
 
 #include "checker.h"
+
+int g_test_line_num;//DELETE BEFORE SUBMIT

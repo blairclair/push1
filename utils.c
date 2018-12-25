@@ -14,7 +14,13 @@
 
 void    init_stack_a(t_args **stack_a, int num_args, char *argv[], int i)
 {
-    while (i < num_args +1)
+	int	j;
+
+	if (i == 0)
+		j = num_args;
+	else
+		j = num_args + 1;
+    while (i < j)
     {
         add_to_end(stack_a, num_args, ft_atoi(argv[i]));
         i++;

@@ -22,8 +22,14 @@ SRCS2=push_swap.c\
 utils.c\
 check_params.c\
 exec_swap.c
+SRCS_TEST=push_swap.c\
+utils.c\
+check_params.c\
+exec_swap.c\
+rng_poss.c
 NAME=checker
 NAME2=push_swap
+NAME3=test
 
 all: $(NAME)
 
@@ -33,6 +39,7 @@ $(NAME): $(SRCS)
 	$(CC) -c $(SRCS)
 	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) $(LIBFT) $(PRINT)
 	$(CC) $(CFLAGS) -o $(NAME2) $(SRCS2) $(LIBFT) $(PRINT)
+#	$(CC) $(CFLAGS) -o $(NAME3) $(SRCS_TEST) $(LIBFT) $(PRINT)
 clean:
 	/bin/rm -f *.o
 	make -C libft/ clean

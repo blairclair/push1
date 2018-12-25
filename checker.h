@@ -38,4 +38,6 @@ void				print_list(t_args *stack_a, t_args *stack_b);
 void				delete_node(t_args **head, int n);
 void				resort_stack_b(t_args **stack_a, t_args **stack_b);
 void				init_stack_a(t_args **stack_a, int num_args, char *argv[], int i);
+void				call_exec(t_args **stack_a, t_args **stack_b, char *choice);
+t_args				*push_swap(t_args *stack_a, t_args *stack_b);
 #endif
