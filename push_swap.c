@@ -48,23 +48,25 @@ int		get_lowest_arg(t_args *stack_ab)
 	return (temp);
 }
 
-int	get_unsorted_pos(t_args *stack_a)//not zero based
+int	get_unsorted_pos(t_args *stack_ab, int stack)//not zero based
 {
 	int	temp;
 	int	i;
 
 	i = 0;
-	if (stack_a == NULL)
+	if (stack_ab == NULL)
 		return (-1);
-	while (stack_a)
+	while (stack_ab)
 	{
-		temp = stack_a->arg;
-		if (stack_a->next)
+		temp = stack_ab->arg;
+		if (stack_ab->next)
 		{
-			if (temp > stack_a->next->arg)
+			if (temp > stack_ab->next->arg && stack == 1)
+				return (i + 1);
+			else if (temp < stack_ab->next->arg && stack == 2)
 				return (i + 1);
 		}
-		stack_a = stack_a->next;
+		stack_ab = stack_ab->next;
 		i++;
 	}
 	return (i);
@@ -204,11 +206,14 @@ void	make_merge_perfect(t_args **stack_a, t_args **stack_b)
 			push_to(stack_a, stack_b);
 			lowest_a = get_lowest_arg(*stack_a);
 			highest_b = get_highest_arg(*stack_b);
-			resort_stack_b(stack_a, stack_b);
 			if (highest_b < lowest_a)
+			{
+				resort_stack_b(stack_a, stack_b);
 				break ;
+			}
 		}
 	}
+	do_merge(stack_a, stack_b);
 }
 
 int		get_last_arg(t_args *stack_ab)
@@ -229,7 +234,7 @@ void	resort_stack_b(t_args **stack_a, t_args **stack_b)
 	{
 		lowest = get_lowest_arg(*stack_b);
 		highest = get_highest_arg(*stack_b);
-		pos = get_unsorted_pos(*stack_b);
+		pos = get_unsorted_pos(*stack_b, 2);
 		last = get_last_arg(*stack_b);
 		if (check_stack_b(*stack_b))
 			break ;
@@ -266,6 +271,52 @@ void	resort_stack_b(t_args **stack_a, t_args **stack_b)
 				ft_printf("rb\n");
 			rot_up(stack_b);
 		}
+		else if ((*stack_b)->arg == highest && (*stack_b)->arg < (*stack_a)->arg)
+		{
+			ft_printf("pa\n");
+			push_to(stack_b, stack_a);
+		}
+		else
+		{
+			ft_printf("rrb\n");
+			rot_down(stack_b);
+
+		}
+	}
+}
+
+int		choose_rot(t_args *stack_a, int lowest)
+{
+	int	i;
+
+	i = 0;
+	while (stack_a)
+	{
+		if (stack_a->arg == lowest)
+			break ; 
+		i++;
+		stack_a = stack_a->next;
+	}
+	if (i > stack_a->num_args / 2)
+	{
+		return(2);
+	}
+	return (1);
+}
+
+void	should_merge(t_args **stack_a, t_args **stack_b)
+{
+	if (check_if_done(*stack_a) && (*stack_b) == NULL)
+	{
+		exit(0);
+	}
+	if (check_if_done((*stack_a)) && (*stack_b))
+	{
+		if (is_perfect_merge(*stack_a, *stack_b))
+			do_merge(stack_a, stack_b);
+		else
+			make_merge_perfect(stack_a, stack_b);
+		exit(0);
 	}
 }
 
@@ -274,62 +325,48 @@ void	push_swap_simple(t_args **stack_a, t_args **stack_b)
 	int	pos;
 	int	lowest;
 	int	highest;
+	int	check;
 
+	check = -1;
 	while (1)
 	{
 		lowest = get_lowest_arg(*stack_a);
 		highest = get_highest_arg(*stack_a);
-		pos = get_unsorted_pos(*stack_a);
+		pos = get_unsorted_pos(*stack_a, 1);
 		if (!check_stack_b(*stack_b))
 			resort_stack_b(stack_a, stack_b);
 		if (check_if_done(*stack_a) && (*stack_b) == NULL)
 			break ;
-		else if (check_if_done((*stack_a)) && (*stack_b))
-		{
-			if (is_perfect_merge(*stack_a, *stack_b))
-			{
-				do_merge(stack_a, stack_b);
-				break ;
-			}
-			else
-				make_merge_perfect(stack_a, stack_b);
-		}
-		else if ((*stack_a)->arg == highest)
-		{
-			ft_printf("ra\n");
-			rot_up(stack_a);
-		}
-		else if (last_as_first_value(*stack_a, lowest))
-		{
-			ft_printf("rra\n");
-			rot_down(stack_a);
-		}
-		else if (pos == 1 && lowest == (*stack_a)->next->arg)
+		if (check_if_done((*stack_a)) && (*stack_b))
+			should_merge(stack_a, stack_b);
+		if ((*stack_a)->arg > (*stack_a)->next->arg)
 		{
 			ft_printf("sa\n");
 			ft_num_swap_individual(stack_a);
+			should_merge(stack_a, stack_b);
 		}
-		else if (pos_as_last_value(*stack_a, pos))
-			make_pos_last_value(stack_a, stack_b, pos);
-		else if ((((*stack_a) && (*stack_b) && (*stack_a)->arg >
-		(*stack_b)->arg && (*stack_a)->arg != lowest)) ||
-		((*stack_b) == NULL && (*stack_a)->arg != lowest))
+		if (check == -1)
+			check = choose_rot(*stack_a, lowest);
+		if ((*stack_a)->arg == lowest)
 		{
 			ft_printf("pb\n");
 			push_to(stack_a, stack_b);
+			check = -1;
+			should_merge(stack_a, stack_b);
 		}
-		else
+		if (check != -1)
 		{
-			if (pos > 1)
-			{
-				ft_printf("pb\n");
-				push_to(stack_a, stack_b);
-			}
-			else
+			if (check == 1)
 			{
 				ft_printf("ra\n");
 				rot_up(stack_a);
 			}
+			else
+			{
+				ft_printf("rra\n");
+				rot_down(stack_a);
+			}
+			should_merge(stack_a, stack_b);
 		}
 	}
 }
