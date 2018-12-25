@@ -89,3 +89,20 @@ void    print_list(t_args *stack_a, t_args *stack_b)
         }
     }
 }
+
+int		is_backwards(t_args *stack_a, int highest)
+{
+	int	tmp;
+	if (stack_a->arg != highest)
+		return (0);
+	printf("sa %d\n", stack_a->arg);
+	while (stack_a)
+	{
+		if (stack_a->next)
+			tmp = stack_a->next->arg;
+		if (tmp < stack_a->arg)
+			return (0);
+		stack_a = stack_a->next;
+	}
+	return (1);
+}

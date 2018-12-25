@@ -298,12 +298,37 @@ int		should_merge(t_args **stack_a, t_args **stack_b)
 	return (0);
 }
 
+int		get_something(t_args *stack_a)
+{
+	int	tmp;
+	int	i;
+	int	num;
+	int	divi;
+
+	i = 0;
+	tmp = stack_a->arg;
+		// printf("tmp: %d\n", tmp);
+	num = stack_a->num_args;
+	divi = num % 2;
+	while (stack_a)
+	{
+		if (tmp >= stack_a->arg)
+			i++;
+		stack_a = stack_a->next;
+	}
+	// printf("i: %d\n", i);
+	if ((i > num / 2))// || (i == num / 2 && divi == 0))
+		return (1);
+	return (0);
+}
+
 int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 {
 	int	pos;
 	int	lowest;
 	int	highest;
 	int	check;
+	int	last;
 
 	check = -1;
 	while (1)
@@ -311,6 +336,7 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 		lowest = get_lowest_arg(*stack_a);
 		highest = get_highest_arg(*stack_a);
 		pos = get_unsorted_pos(*stack_a, 1);
+		last = get_last_arg(*stack_a);
 		if (!check_stack_b(*stack_b))
 			resort_stack_b(stack_a, stack_b);
 		if (check_if_done(*stack_a) && (*stack_b) == NULL)
@@ -320,14 +346,21 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 			if (should_merge(stack_a, stack_b))
 				return (1);
 		}
+
+		if (check == -1)
+			check = get_something(*stack_a);
 		if ((*stack_a)->arg > (*stack_a)->next->arg)
 		{
-			call_exec(stack_a, stack_b, "sa");
+			if (get_something(*stack_a))
+			{
+				call_exec(stack_a, stack_b, "ra");
+				check = -1;
+			}
+			else
+				call_exec(stack_a, stack_b, "sa");
 			if (should_merge(stack_a, stack_b))
 				return (1);
 		}
-		if (check == -1)
-			check = choose_rot(*stack_a, lowest);
 		if ((*stack_a)->arg == lowest)
 		{
 			call_exec(stack_a, stack_b, "pb");

@@ -21,9 +21,11 @@ exec_swap.c
 SRCS2=push_swap.c\
 utils.c\
 check_params.c\
-exec_swap.c
+exec_swap.c\
+utils_two.c
 SRCS_TEST=push_swap.c\
 utils.c\
+utils_two.c\
 check_params.c\
 exec_swap.c\
 rng_poss.c
@@ -47,7 +49,7 @@ clean:
 
 fclean: clean
 	/bin/rm -f $(NAME)
-	/bin/rm -f $(NAME2)
+#	/bin/rm -f $(NAME2)
 	make -C libft/ fclean
 	make -C libft/printf_functions/ fclean
 

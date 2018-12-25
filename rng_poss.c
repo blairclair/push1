@@ -106,7 +106,7 @@ char	**check_all()
 
 	i = 0;
 	args = ft_memalloc(300000);
-	while (i < 5)
+	while (i < 50)
 	{
 		if (!args[i])
 			args[i] = ft_memalloc(20);
@@ -132,21 +132,17 @@ int		main()
 	i = 0;
 	stack_b = NULL;
 	stack_a = NULL;
-	// arg = check_all();
-	arg = malloc(50);
-	strcpy(arg[i], "5 3 2 4 1");
-	// while (arg[i])
-	// {
+	arg = check_all();
+	while (arg[i])
+	{
 		stack_b = NULL;
 		stack_a = NULL;
 		str = ft_strsplit(arg[i], ' ');
-		init_stack_a(&stack_a, count_num_2d_args(str) - 1, str, 0);
-		print_list(stack_a, stack_b);
+    	init_stack_a(&stack_a, count_num_2d_args(str), str, 0);
 		push_swap(stack_a, stack_b);
-		printf("g: %d\n", g_test_line_num);
-		// if (g_test_line_num < 12)
-		printf("arg: %s\n", arg[i]);
+		if (g_test_line_num > 12)
+			printf("arg: %s\n", arg[i]);
 		i++;
-	// }
+	}
 	return (0);
 }
