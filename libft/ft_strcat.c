@@ -19,16 +19,22 @@ char	*ft_strcat(char *restrict s1, const char *restrict s2)
 
 	i = 0;
 	j = 0;
+	printf("s2: %s\n", s2);
+	printf("hithere\n");
 	while (s1[i])
 	{
 		i++;
 	}
+	printf("ko\n");
 	while (s2[j])
 	{
+		// printf("k3\n");
 		s1[i] = s2[j];
+		// printf("k4\n");
 		j++;
 		i++;
 	}
+	printf("k2\n");
 	s1[i] = '\0';
 	return (s1);
 }
