@@ -106,7 +106,7 @@ char	**check_all()
 
 	i = 0;
 	args = ft_memalloc(300000);
-	while (i < 50)
+	while (i < 5)
 	{
 		if (!args[i])
 			args[i] = ft_memalloc(20);

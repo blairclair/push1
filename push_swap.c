@@ -319,7 +319,7 @@ int		get_something(t_args *stack_a)
 	// printf("i: %d\n", i);
 	if ((i > num / 2))// || (i == num / 2 && divi == 0))
 		return (1);
-	return (0);
+	return (3);
 }
 
 int		push_swap_simple(t_args **stack_a, t_args **stack_b)
@@ -349,18 +349,6 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 
 		if (check == -1)
 			check = get_something(*stack_a);
-		if ((*stack_a)->arg > (*stack_a)->next->arg)
-		{
-			if (get_something(*stack_a))
-			{
-				call_exec(stack_a, stack_b, "ra");
-				check = -1;
-			}
-			else
-				call_exec(stack_a, stack_b, "sa");
-			if (should_merge(stack_a, stack_b))
-				return (1);
-		}
 		if ((*stack_a)->arg == lowest)
 		{
 			call_exec(stack_a, stack_b, "pb");
@@ -368,15 +356,38 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 			if (should_merge(stack_a, stack_b))
 				return (1);
 		}
-		if (check != -1)
+		if ((*stack_a)->arg > (*stack_a)->next->arg)
 		{
-			if (check == 1)
+			if (is_backwards(*stack_a, highest) && (*stack_b))
+				call_exec(stack_a, stack_b, "sa");
+			else if (get_something(*stack_a) == 1 && check != 3)
+			{
 				call_exec(stack_a, stack_b, "ra");
+			}
+			else if (lowest == last && check != 1)
+				call_exec(stack_a, stack_b, "rra");
 			else
+				call_exec(stack_a, stack_b, "sa");
+			if (should_merge(stack_a, stack_b))
+				return (1);
+		}
+		else if (check != -1)
+		{
+			if ((*stack_a)->arg != lowest && (*stack_a)->next &&
+			 (*stack_a)->next->arg == highest)
+			{
+				call_exec(stack_a, stack_b, "ra");
+				call_exec(stack_a, stack_b, "ra");
+			}
+			else if (check == 1)
+				call_exec(stack_a, stack_b, "ra");
+			else if (check == 3)
 				call_exec(stack_a, stack_b, "rra");
 			if (should_merge(stack_a, stack_b))
 				return (1);
 		}
+		if (g_test_line_num > 30)
+			return (1);
 	}
 }
 
