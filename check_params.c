@@ -12,7 +12,7 @@
 
 #include "checker.h"
 
-int is_dup(int *dup_check, int num)
+int	is_dup(int *dup_check, int num)
 {
 	int i;
 
@@ -30,13 +30,30 @@ int is_dup(int *dup_check, int num)
 	}
 	return (1);
 }
-// fix the fact that the checker reads all the args in one 
-// string in the way that they will test it re: corrections pdf
-int is_safe(int argc, char *argv[])
+
+int	check_num(char **str, int *dup_check, int i)
 {
-	int         i;
-	int         *dup_check;
-	long long   num;
+	int	num;
+
+	while (str[i])
+	{
+		num = ft_atol(str[i]);
+		if (!ft_isnumber(str[i]) || num > 2147483647 ||
+		num < -2147483648 || !is_dup(dup_check, num))
+		{
+			free(dup_check);
+			return (0);
+		}
+		dup_check[i - 1] = num;
+		i++;
+	}
+	return (1);
+}
+
+int	is_safe(int argc, char *argv[])
+{
+	int			i;
+	int			*dup_check;
 	char		**str;
 	int			ret;
 
@@ -53,20 +70,8 @@ int is_safe(int argc, char *argv[])
 	else
 		str = argv;
 	dup_check = ft_memalloc(argc * sizeof(int*) + 1);
-	while (str[i])
-	{
-		num = ft_atol(str[i]);
-		if (!ft_isnumber(str[i]) || num > 2147483647 || num < -2147483648)
-		{
-			free(dup_check);
-			return (-1);
-		}
-		if (!is_dup(dup_check, num))
-			return (-1);
-		dup_check[i - 1] = num;
-		i++;
-	}
-    free(dup_check);
+	if (!check_num(str, dup_check, i))
+		return (-1);
+	free(dup_check);
 	return (ret);
 }
-

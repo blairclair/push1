@@ -14,18 +14,13 @@ LIBFT=libft/libft.a
 PRINT=libft/printf_functions/libftprintf.a
 CC=gcc
 CFLAGS= -Wall -Wextra -Werror -g
-SRCS= checker.c\
+SRCS=checker.c
+SRCS2=push_swap.c
+SRCS_COMBINE=utils.c\
 check_params.c\
-utils.c\
-exec_swap.c
-SRCS2=push_swap.c\
-utils.c\
-check_params.c\
+call_exec.c\
 exec_swap.c
 SRCS_TEST=push_swap.c\
-utils.c\
-check_params.c\
-exec_swap.c\
 rng_poss.c
 NAME=checker
 NAME2=push_swap
@@ -37,8 +32,8 @@ $(NAME): $(SRCS)
 	make -C libft/
 	make -C libft/printf_functions/
 	$(CC) -c $(SRCS)
-	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) $(LIBFT) $(PRINT)
-	$(CC) $(CFLAGS) -o $(NAME2) $(SRCS2) $(LIBFT) $(PRINT)
+	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) $(SRCS_COMBINE) $(LIBFT) $(PRINT)
+	$(CC) $(CFLAGS) -o $(NAME2) $(SRCS2) $(LIBFT) $(SRCS_COMBINE) $(PRINT)
 #	$(CC) $(CFLAGS) -o $(NAME3) $(SRCS_TEST) $(LIBFT) $(PRINT)
 clean:
 	/bin/rm -f *.o
