@@ -57,7 +57,7 @@ void    get_input(t_args *stack_a, t_args *stack_b)
     {
 		printf("line: %s\n", line);
         swap_cmds(line, &stack_a, &stack_b);
-        // print_list(stack_a, stack_b);
+        print_list(stack_a, stack_b);
     }
 	if (stack_b == NULL && check_if_done(stack_a))
 		ft_printf("OK\n");

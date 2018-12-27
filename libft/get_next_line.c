@@ -14,15 +14,44 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "get_next_line.h"
-int	get_char_pos(char *str, int c)
+int	check_if_line_done(char *temp_whole2, int i, struct s_nums *nums, char **line)
 {
-	int	i;
+	static int num_tries[2000];
 
-	i = 0;
-	while (str[i])
+	ft_bzero(line[0], ft_strlen(line[0]));
+	if (temp_whole2[i] != '\0' || (temp_whole2[i] == '\0' &&
+		num_tries[nums->fd2] != 3 && temp_whole2[i - 1] == '\n'))
 	{
-		if (str[i] == c)
+		line[0] = malloc((i - 1) - nums->j);
+		line[0] = ft_memmove(line[0], temp_whole2 + nums->j, (i - 1) - nums->j);
+		line[0][(i - 1) - nums->j] = '\0';
+		if (temp_whole2[i] == '\0')
+			num_tries[nums->fd2] = 3;
+		return (1);
+	}
+	else if (temp_whole2[i] == '\0' &&
+			num_tries[nums->fd2] != 3 && temp_whole2[i - 1] != '\n')
+	{
+		line[0] = malloc((i + 1) - nums->j);
+		line[0] = ft_memmove(line[0], temp_whole2 + nums->j, (i + 1) - nums->j);
+		line[0][(i + 1) - nums->j] = '\0';
+		num_tries[nums->fd2] = 3;
+		return (0);
+	}
+	else if (num_tries[nums->fd2] == 3)
+		return (3);
+	return (1);
+}
+
+int	check_while(char *whole2, int i)
+{
+	while (whole2[i])
+	{
+		if ((whole2[i] == '\n' && whole2[i + 1] != '\0') || whole2[i] == '\0')
+		{
+			i++;
 			return (i);
+		}
 		i++;
 	}
 	return (i);
@@ -30,34 +59,29 @@ int	get_char_pos(char *str, int c)
 
 int	get_next_line(const int fd, char **line)
 {
-	char	*buf;
-	int		ret;
-	static char	*tmp = NULL;
-	char	*final;
+	static int		i[2000];
+	static char		**temp_whole2;
+	int				check;
+	struct s_nums	nums;
 
-	buf = ft_memalloc(50);
-	while (1)
+	nums.whole2 = "";
+	nums.fd2 = fd;
+	nums.whole2 = malloc(700);
+	if (fd < 0 || read(fd, 0, 0) < 0 || line == NULL)
+		return (-1);
+	line[0] = "";
+	nums.j = i[fd];
+	if (temp_whole2 == NULL)
+		temp_whole2 = malloc(700);
+	while ((check = read(fd, nums.buf, BUFF_SIZE)) > 0)
 	{
-		ft_bzero(buf, ft_strlen(buf));
-		ret = read(fd, buf, 20);
-		if (buf == NULL || ret == 0)
-			return (0);
-		buf[ret + 1] = '\0';
-		if (tmp)
-			final = ft_strjoin(tmp, buf);
-		else
-			final = buf;
-		printf("final 1: %s\n", final);
-		if ((tmp = ft_strchr(final, '\n')) != NULL)
-		{
-			final[get_char_pos(final, '\n')] = '\0';
-			printf("final 2: %s\n", final);
-			(*line) = final;
-			break ;
-		}
-		
+		nums.buf[check] = '\0';
+		temp_whole2[fd] = ft_strjoin(nums.whole2, nums.buf);
+		nums.whole2 = temp_whole2[fd];
+		ft_bzero(nums.buf, BUFF_SIZE);
 	}
-	if (tmp)
-		return (1);
-	return (0);
+	temp_whole2[fd][ft_strlen(temp_whole2[fd])] = '\0';
+	i[fd] = check_while(temp_whole2[fd], i[fd]);
+	check = check_if_line_done(temp_whole2[fd], i[fd], &nums, &*line);
+	return (check == 0 || check == 1 || check == 2 ? 1 : 0);
 }

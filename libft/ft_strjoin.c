@@ -22,7 +22,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	else
 	{
-		printf("s %s\n", s2);
 		s3 = (char*)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 		if (s3 == NULL)
 			return (NULL);
