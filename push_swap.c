@@ -409,27 +409,27 @@ t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 	return (stack_a);
 }
 
-// int		main(int argc, char *argv[])
-// {
-// 	t_args  *stack_a;
-// 	t_args  *stack_b;
-// 	int     check;
-// 	char	**str;
+int		main(int argc, char *argv[])
+{
+	t_args  *stack_a;
+	t_args  *stack_b;
+	int     check;
+	char	**str;
 
-// 	stack_b = NULL;
-// 	stack_a = NULL;
-// 	if ((check = is_safe(argc, argv)) <= 0)
-// 	{
-// 		if (check == -1)
-// 			ft_putstr_fd("Error\n", 2);
-// 		return (0);
-// 	}
-// 	else if (check == 3)
-// 	{
-// 		str = ft_strsplit(argv[1], ' ');
-//     	init_stack_a(&stack_a, count_num_2d_args(str), str, 0);
-// 	}
-// 	else
-// 		init_stack_a(&stack_a, argc - 1, argv, 1);
-// 	push_swap(stack_a, stack_b);
-// }
+	stack_b = NULL;
+	stack_a = NULL;
+	if ((check = is_safe(argc, argv)) <= 0)
+	{
+		if (check == -1)
+			ft_putstr_fd("Error\n", 2);
+		return (0);
+	}
+	else if (check == 3)
+	{
+		str = ft_strsplit(argv[1], ' ');
+    	init_stack_a(&stack_a, count_num_2d_args(str), str, 0);
+	}
+	else
+		init_stack_a(&stack_a, argc - 1, argv, 1);
+	push_swap(stack_a, stack_b);
+}

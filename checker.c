@@ -52,12 +52,13 @@ void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 void    get_input(t_args *stack_a, t_args *stack_b)
 {
     int ret;
-    char    buf[5];
-
-    while ((ret = read(1, buf, 5)) > 0)
+    char    *line;
+	ret = 1;
+    line = ft_memalloc(5); get next line doesnt work with 1 2 3 4 5 
+	because its always in order.
+	while (get_next_line(0, &line) > 0)
     {
-        buf[ret - 1] = '\0';
-        swap_cmds(buf, &stack_a, &stack_b);
+        swap_cmds(line, &stack_a, &stack_b);
         print_list(stack_a, stack_b);
     }
 	if (stack_b == NULL && check_if_done(stack_a))
@@ -75,16 +76,16 @@ int main(int argc, char *argv[])
 
 	stack_b = NULL;
 	stack_a = NULL;
-    if ((check = is_safe(argc, argv)) <= 0)
-    {
-        if (check == -1)
-            ft_putstr_fd("Error\n", 2);
+   	if ((check = is_safe(argc, argv)) <= 0)
+	{
+		if (check == -1)
+			ft_putstr_fd("Error\n", 2);
 		return (0);
-    }
+	}
 	else if (check == 3)
 	{
 		str = ft_strsplit(argv[1], ' ');
-    	init_stack_a(&stack_a, count_num_2d_args(str) - 1, str, 0);
+    	init_stack_a(&stack_a, count_num_2d_args(str), str, 0);
 	}
 	else
 		init_stack_a(&stack_a, argc - 1, argv, 1);
