@@ -125,33 +125,33 @@ void	call_exec_two(t_args **stack_a, t_args **stack_b, char *choice)
 {
 	if (!ft_strcmp(choice, "rrb"))
 	{
-		ft_printf("rrb\n");
+		// ft_printf("rrb\n");
 		rot_down(stack_b);
 	}
 	else if (!ft_strcmp(choice, "rr"))
 	{
-		ft_printf("rr\n");
+		// ft_printf("rr\n");
 		rot_up(stack_a);
 		rot_up(stack_b);
 	}
 	else if (!ft_strcmp(choice, "ra"))
 	{
-		ft_printf("ra\n");
+		// ft_printf("ra\n");
 		rot_up(stack_a);
 	}
 	else if (!ft_strcmp(choice, "rb"))
 	{
-		ft_printf("rb\n");
+		// ft_printf("rb\n");
 		rot_up(stack_b);
 	}
 	else if (!ft_strcmp(choice, "pb"))
 	{
-		ft_printf("pb\n");
+		// ft_printf("pb\n");
 		push_to(stack_a, stack_b);
 	}
 	else if (!ft_strcmp(choice, "pa"))
 	{
-		ft_printf("pa\n");
+		// ft_printf("pa\n");
 		push_to(stack_b, stack_a);
 	}
 }
@@ -160,29 +160,29 @@ void	call_exec(t_args **stack_a, t_args **stack_b, char *choice)
 	g_test_line_num++;
 	if (!ft_strcmp(choice, "ss"))
 	{
-		ft_printf("ss\n");
+		// ft_printf("ss\n");
 		ft_num_swap_individual(stack_a);
 		ft_num_swap_individual(stack_b);
 	}
 	else if (!ft_strcmp(choice, "sa"))
 	{
-		ft_printf("sa\n");
+		// ft_printf("sa\n");
 		ft_num_swap_individual(stack_a);
 	}
 	else if (!ft_strcmp(choice, "sb"))
 	{
-		ft_printf("sb\n");
+		// ft_printf("sb\n");
 		ft_num_swap_individual(stack_b);
 	}
 	else if (!ft_strcmp(choice, "rrr"))
 	{
-		ft_printf("rrr\n");
+		// ft_printf("rrr\n");
 		rot_down(stack_a);
 		rot_down(stack_b);
 	}
 	else if (!ft_strcmp(choice, "rra"))
 	{
-		ft_printf("rra\n");
+		// ft_printf("rra\n");
 		rot_down(stack_a);
 	}
 	else

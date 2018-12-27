@@ -38,8 +38,8 @@ $(NAME): $(SRCS)
 	make -C libft/printf_functions/
 	$(CC) -c $(SRCS)
 	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) $(LIBFT) $(PRINT)
-	$(CC) $(CFLAGS) -o $(NAME2) $(SRCS2) $(LIBFT) $(PRINT)
-#	$(CC) $(CFLAGS) -o $(NAME3) $(SRCS_TEST) $(LIBFT) $(PRINT)
+#	$(CC) $(CFLAGS) -o $(NAME2) $(SRCS2) $(LIBFT) $(PRINT)
+	$(CC) $(CFLAGS) -o $(NAME3) $(SRCS_TEST) $(LIBFT) $(PRINT)
 clean:
 	/bin/rm -f *.o
 	make -C libft/ clean

@@ -298,7 +298,7 @@ int		should_merge(t_args **stack_a, t_args **stack_b)
 	return (0);
 }
 
-int		get_something(t_args *stack_a)
+int		get_something(t_args *stack_a, int lowest)
 {
 	int	tmp;
 	int	i;
@@ -312,14 +312,15 @@ int		get_something(t_args *stack_a)
 	divi = num % 2;
 	while (stack_a)
 	{
-		if (tmp >= stack_a->arg)
+		if (stack_a->arg == lowest)
+			break ;
 			i++;
 		stack_a = stack_a->next;
 	}
 	// printf("i: %d\n", i);
 	if ((i > num / 2))// || (i == num / 2 && divi == 0))
-		return (1);
-	return (3);
+		return (3);
+	return (1);
 }
 
 int		push_swap_simple(t_args **stack_a, t_args **stack_b)
@@ -337,8 +338,6 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 		highest = get_highest_arg(*stack_a);
 		pos = get_unsorted_pos(*stack_a, 1);
 		last = get_last_arg(*stack_a);
-		if (!check_stack_b(*stack_b))
-			resort_stack_b(stack_a, stack_b);
 		if (check_if_done(*stack_a) && (*stack_b) == NULL)
 			return (1);
 		if (check_if_done((*stack_a)) && (*stack_b))
@@ -348,7 +347,7 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 		}
 
 		if (check == -1)
-			check = get_something(*stack_a);
+			check = get_something(*stack_a, lowest);
 		if ((*stack_a)->arg == lowest)
 		{
 			call_exec(stack_a, stack_b, "pb");
@@ -360,12 +359,16 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 		{
 			if (is_backwards(*stack_a, highest) && (*stack_b))
 				call_exec(stack_a, stack_b, "sa");
-			else if (get_something(*stack_a) == 1 && check != 3)
+			else if (get_something(*stack_a, lowest) == 1 && check != 3)
 			{
 				call_exec(stack_a, stack_b, "ra");
+				check = 1;
 			}
 			else if (lowest == last && check != 1)
+			{
 				call_exec(stack_a, stack_b, "rra");
+				check = 3;
+			}
 			else
 				call_exec(stack_a, stack_b, "sa");
 			if (should_merge(stack_a, stack_b))
@@ -374,10 +377,11 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 		else if (check != -1)
 		{
 			if ((*stack_a)->arg != lowest && (*stack_a)->next &&
-			 (*stack_a)->next->arg == highest)
+			 (*stack_a)->next->arg == highest && last != lowest)
 			{
 				call_exec(stack_a, stack_b, "ra");
 				call_exec(stack_a, stack_b, "ra");
+				check = 1;
 			}
 			else if (check == 1)
 				call_exec(stack_a, stack_b, "ra");
@@ -405,27 +409,27 @@ t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 	return (stack_a);
 }
 
-int		main(int argc, char *argv[])
-{
-	t_args  *stack_a;
-	t_args  *stack_b;
-	int     check;
-	char	**str;
+// int		main(int argc, char *argv[])
+// {
+// 	t_args  *stack_a;
+// 	t_args  *stack_b;
+// 	int     check;
+// 	char	**str;
 
-	stack_b = NULL;
-	stack_a = NULL;
-	if ((check = is_safe(argc, argv)) <= 0)
-	{
-		if (check == -1)
-			ft_putstr_fd("Error\n", 2);
-		return (0);
-	}
-	else if (check == 3)
-	{
-		str = ft_strsplit(argv[1], ' ');
-    	init_stack_a(&stack_a, count_num_2d_args(str), str, 0);
-	}
-	else
-		init_stack_a(&stack_a, argc - 1, argv, 1);
-	push_swap(stack_a, stack_b);
-}
+// 	stack_b = NULL;
+// 	stack_a = NULL;
+// 	if ((check = is_safe(argc, argv)) <= 0)
+// 	{
+// 		if (check == -1)
+// 			ft_putstr_fd("Error\n", 2);
+// 		return (0);
+// 	}
+// 	else if (check == 3)
+// 	{
+// 		str = ft_strsplit(argv[1], ' ');
+//     	init_stack_a(&stack_a, count_num_2d_args(str), str, 0);
+// 	}
+// 	else
+// 		init_stack_a(&stack_a, argc - 1, argv, 1);
+// 	push_swap(stack_a, stack_b);
+// }
