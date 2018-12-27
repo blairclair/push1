@@ -26,10 +26,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		s3 = (char*)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 		if (s3 == NULL)
 			return (NULL);
-			printf("s1 %s s2 %s\n", s1, s2);
 		strcpy(s3, s1);
-		printf("gfhgfhgfh\n\n");
-		printf("ss2: %s\n", s2);
 		strcat(s3, s2);
 		while (s3[i])
 			i++;

@@ -51,15 +51,13 @@ void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 
 void    get_input(t_args *stack_a, t_args *stack_b)
 {
-    int ret;
     char    *line;
-	ret = 1;
-    line = ft_memalloc(5); get next line doesnt work with 1 2 3 4 5 
-	because its always in order.
-	while (get_next_line(0, &line) > 0)
+	
+	while (get_next_line(0, &line) != 0)
     {
+		printf("line: %s\n", line);
         swap_cmds(line, &stack_a, &stack_b);
-        print_list(stack_a, stack_b);
+        // print_list(stack_a, stack_b);
     }
 	if (stack_b == NULL && check_if_done(stack_a))
 		ft_printf("OK\n");
