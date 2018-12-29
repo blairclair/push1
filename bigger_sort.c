@@ -125,9 +125,13 @@ int		partition(t_args **stack_a, t_args **stack_b, int lowest, int highest)
 			(*stack_a) = (*stack_a)->next;
 		side = which_side(head, (*stack_a)->arg, pivot);
 		len = check_before_pivot(head, pivot);
-		while (++i < len)
-			call_exec(stack_a, stack_b, "pb");
-		if (((*stack_a)->arg > pivot && side == 2) || ((*stack_a)->arg == pivot))
+		if (len)
+		{
+			i = -1;
+			while (++i < len)
+				call_exec(stack_a, stack_b, "pb");
+		}
+		else if (((*stack_a)->arg > pivot && side == 2) || ((*stack_a)->arg == pivot))
 		{
 			(*stack_a) = (*stack_a)->next;
 		}

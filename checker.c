@@ -51,14 +51,22 @@ void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 
 void    get_input(t_args *stack_a, t_args *stack_b)
 {
-    char    *line;
-	
-	while (get_next_line(0, &line) != 0)
+    // char    *line;
+	char	buf[5];
+	int		ret;
+
+    while ((ret = read(1, buf, 5)) > 0)
     {
-		printf("line: %s\n", line);
-        swap_cmds(line, &stack_a, &stack_b);
+        buf[ret - 1] = '\0';
+        swap_cmds(buf, &stack_a, &stack_b);
         print_list(stack_a, stack_b);
     }
+	// while (get_next_line(0, &line) > 0)
+    // {
+	// 	printf("line: %s\n", line);
+    //     swap_cmds(line, &stack_a, &stack_b);
+    //     print_list(stack_a, stack_b);
+    // }
 	if (stack_b == NULL && check_if_done(stack_a))
 		ft_printf("OK\n");
 	else
