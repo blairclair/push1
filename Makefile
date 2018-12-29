@@ -15,7 +15,8 @@ PRINT=libft/printf_functions/libftprintf.a
 CC=gcc
 CFLAGS= -Wall -Wextra -Werror -g
 SRCS=checker.c
-SRCS2=push_swap.c
+SRCS2=push_swap.c\
+bigger_sort.c
 SRCS_COMBINE=utils.c\
 check_params.c\
 call_exec.c\

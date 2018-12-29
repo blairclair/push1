@@ -403,7 +403,11 @@ t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 	g_test_line_num = 0;
 	if (check_if_done(stack_a) && stack_b == NULL)
 		return (stack_a);
-	push_swap_simple(&stack_a, &stack_b);
+	if (stack_a->num_args <= 5)
+		push_swap_simple(&stack_a, &stack_b);
+	else
+		quick_sort(&stack_a, &stack_b, 0, stack_a->num_args);
+
 	// printf("line num %d\n", g_test_line_num);
 	// }
 	return (stack_a);

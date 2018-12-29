@@ -42,4 +42,6 @@ void				call_exec(t_args **stack_a, t_args **stack_b, char *choice);
 t_args				*push_swap(t_args *stack_a, t_args *stack_b);
 int					is_backwards(t_args *stack_a, int highest);
 int					get_last_arg(t_args *stack_ab);
+int					quick_sort(t_args **stack_a, t_args **stack_b, int lowest, int highest);
+int					get_lowest_arg(t_args *stack_ab);
 #endif
