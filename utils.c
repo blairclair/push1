@@ -43,7 +43,7 @@ void	add_to_end(t_args **stack_ab, int num_args, int arg)
 		(*stack_ab) = newnode;
 		return ;
 	}
-	while (last->next != NULL)
+	while (last->next)
 		last = last->next;
 	last->next = newnode;
 	newnode->prev = last;

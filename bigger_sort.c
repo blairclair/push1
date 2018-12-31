@@ -74,34 +74,51 @@ void	stack_b_sort(t_args **stack_a, t_args **stack_b)
 	}
 }
 
-void	stack_a_sort(t_args **stack_a, t_args **stack_b, int pivot)
+t_args	*list_dup(t_args *lst)
+{
+	t_args	*new_list;
+	int		i;
+	int		num;
+
+	i = 0;
+	num = lst->num_args;
+	new_list = NULL;
+	while (lst)
+	{
+		add_to_end(&new_list, num, lst->arg);
+		lst = lst->next;
+	}
+	return (new_list);
+}
+
+void	stack_a_sort(t_args **stack_a, t_args **stack_b)
 {
 	int	i;
-	int	mult_pivots[pivot + 1];
-	int	num_check;
+	int	lowest;
+	int	check_ra;
+	int	check_rra;
+	t_args	*head;
 
-	i = -1;
-	num_check = -1;
-	while (++i < pivot)
-		mult_pivots[i] = ((*stack_a)->num_args / pivot) * (i + 1);
-	i = 0;
 	while ((*stack_a) && !check_if_done(*stack_a))
 	{
-		while ((*stack_a) && num_check != (*stack_a)->arg
-		&& mult_pivots[i] != (*stack_a)->arg)
+		i = 0;
+		lowest = get_lowest_arg(*stack_a);
+		head = list_dup(*stack_a);
+		check_ra = how_many_rb(head, lowest);
+		head = list_dup(*stack_a);
+		check_rra = how_many_rrb(head, lowest);
+		if (check_ra < check_rra)
 		{
-			if ((*stack_a)->arg <= mult_pivots[i])
-				call_exec(stack_a, stack_b, "pb");
-			else
-			{
-				num_check = (*stack_a)->arg;
-				call_exec(stack_a, stack_b, "ra");//instead of just doing ra 
-				//figure out which will get you to a number <= multpivot[i] faster
-			}
+			while (++i <= check_ra)
+				call_exec(stack_a, stack_b, "ra");
 		}
-		// if (i == pivot - 1 && (*stack_a)->arg != mult_pivots[i])
-		// 	call_exec(stack_a, stack_b, "pb");
-		if (i < pivot - 1)
-			i++;
+		else
+		{
+			while (++i <= check_rra)
+				call_exec(stack_a, stack_b, "rra");
+		}
+		call_exec(stack_a, stack_b, "pb");
 	}
+	while (*stack_b)
+		call_exec(stack_a, stack_b, "pa");
 }

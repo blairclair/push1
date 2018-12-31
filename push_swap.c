@@ -394,10 +394,92 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 			return (1);
 	}
 }
-#include <math.h>//replace with original ft_sqrt later
+
+void	merge(int nums[], int left, int middle, int right)
+{
+	int	i;
+	int	j;
+	int	k;
+	int	temp1[middle - left + 1];
+	int	temp2[right - middle];
+
+	j = -1;
+	i = -1;
+	while (++i < (middle - left + 1))
+		temp1[i] = nums[i + 1];
+	while (++j < (right - middle))
+		temp2[j] = nums[middle + 1 + j];
+	i = 0;
+	j = 0;
+	k = left;
+	while (i < (middle - left + 1) && j < (right - middle))
+	{
+		if (temp1[i] <= temp2[j])
+		{
+			nums[k] = temp1[i];
+			i++;
+		}
+		else
+		{
+			nums[k] = temp2[j];
+			j++;
+		}
+		k++;
+	}
+	while (i < (middle - left + 1))
+	{
+		nums[k] = temp1[i];
+		k++;
+		i++;
+	}
+	while (j < right - middle)
+	{
+		nums[k] = temp2[j];
+		j++;
+		k++;
+	}
+}
+
+void	merge_sort(int nums[], int left, int right)
+{
+	int middle;
+
+	if (left < right)
+	{
+		middle = left + (right - left) / 2;
+		merge_sort(nums, left, middle);
+		merge_sort(nums, middle + 1, right);
+		merge(nums, left, middle, right);
+	}
+}
+
+int		actual_sort(t_args *stack_a)
+{
+	int	nums[stack_a->num_args + 1];
+	int	len;
+	int	i;
+
+	len = 0;
+	i = 0;
+	while (stack_a)
+	{
+		nums[len] = stack_a->arg;
+		len++;
+		stack_a = stack_a->next;
+	}
+	len = sizeof(nums) / sizeof(nums[0]);
+	merge_sort(nums, 0, len);
+	while (i < len)
+	{
+		printf("ni: %d\n", nums[i]);
+		i++;
+	}
+	return (i);
+}
+
 t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 {
-	int	pivot;
+	// int	pivot;
 	int	lowest;
 
 	lowest = get_lowest_arg(stack_a);
@@ -408,11 +490,10 @@ t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 		push_swap_simple(&stack_a, &stack_b);
 	else
 	{
-		pivot = sqrt(stack_a->num_args - 1);
-		if (pivot <= lowest * 2)
-			pivot = lowest + 1;
-		stack_a_sort(&stack_a, &stack_b, pivot);
-		stack_b_sort(&stack_a, &stack_b);
+		actual_sort(stack_a);
+		// pivot = sqrt(stack_a->num_args);
+		// stack_a_sort(&stack_a, &stack_b);
+		// stack_b_sort(&stack_a, &stack_b);
 			
 	}
 	return (stack_a);
