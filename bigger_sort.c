@@ -17,6 +17,10 @@ int		how_many_rb(t_args *stack_b, int highest)
 	int	track_rb;
 
 	track_rb = 0;
+	if (stack_b->arg == highest)
+		return (0);
+	if (stack_b->num_args == 2)
+		return (1);
 	while (stack_b->arg != highest)
 	{
 		rot_up(&stack_b);
@@ -29,6 +33,10 @@ int		how_many_rrb(t_args *stack_b, int highest)
 {
 	int	track_rrb;
 
+	if (stack_b->arg == highest)
+		return (0);
+	if (stack_b->num_args == 2)
+		return (1);
 	track_rrb = 0;
 	while (stack_b->arg != highest)
 	{
@@ -46,10 +54,10 @@ void	stack_b_sort(t_args **stack_a, t_args **stack_b)
 	int		track_rrb;
 
 	track_rrb = 0;
-	highest = get_highest_arg(*stack_b);
 	i = -1;
 	while ((*stack_b))
 	{
+		highest = get_highest_arg(*stack_b);
 		track_rb = how_many_rb(*stack_b, highest);
 		track_rrb = how_many_rrb(*stack_b, highest);
 		if (track_rb < track_rrb)
@@ -75,7 +83,7 @@ void	stack_a_sort(t_args **stack_a, t_args **stack_b, int pivot)
 	i = -1;
 	num_check = -1;
 	while (++i < pivot)
-		mult_pivots[i] = pivot * i + 1;
+		mult_pivots[i] = ((*stack_a)->num_args / pivot) * (i + 1);
 	i = 0;
 	while ((*stack_a) && !check_if_done(*stack_a))
 	{
@@ -91,8 +99,8 @@ void	stack_a_sort(t_args **stack_a, t_args **stack_b, int pivot)
 				//figure out which will get you to a number <= multpivot[i] faster
 			}
 		}
-		if (i == pivot - 1 && (*stack_a)->arg != mult_pivots[i])
-			call_exec(stack_a, stack_b, "pb");
+		// if (i == pivot - 1 && (*stack_a)->arg != mult_pivots[i])
+		// 	call_exec(stack_a, stack_b, "pb");
 		if (i < pivot - 1)
 			i++;
 	}

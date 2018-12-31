@@ -398,7 +398,9 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 {
 	int	pivot;
+	int	lowest;
 
+	lowest = get_lowest_arg(stack_a);
 	g_test_line_num = 0;
 	if (check_if_done(stack_a) && stack_b == NULL)
 		return (stack_a);
@@ -407,6 +409,8 @@ t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 	else
 	{
 		pivot = sqrt(stack_a->num_args - 1);
+		if (pivot <= lowest * 2)
+			pivot = lowest + 1;
 		stack_a_sort(&stack_a, &stack_b, pivot);
 		stack_b_sort(&stack_a, &stack_b);
 			
