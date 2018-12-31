@@ -394,11 +394,10 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 			return (1);
 	}
 }
-
+#include <math.h>//replace with original ft_sqrt later
 t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 {
-	// if (stack_a->num_args <= 5)
-	// {
+	int	pivot;
 
 	g_test_line_num = 0;
 	if (check_if_done(stack_a) && stack_b == NULL)
@@ -406,10 +405,12 @@ t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 	if (stack_a->num_args <= 5)
 		push_swap_simple(&stack_a, &stack_b);
 	else
-		quick_sort(&stack_a, &stack_b, 0, stack_a->num_args);
-
-	// printf("line num %d\n", g_test_line_num);
-	// }
+	{
+		pivot = sqrt(stack_a->num_args - 1);
+		stack_a_sort(&stack_a, &stack_b, pivot);
+		stack_b_sort(&stack_a, &stack_b);
+			
+	}
 	return (stack_a);
 }
 

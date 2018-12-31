@@ -12,158 +12,88 @@
 
 #include "push_swap.h"	
 
-int		which_side(t_args *stack_a, int arg, int pivot)
+int		how_many_rb(t_args *stack_b, int highest)
 {
-	while (stack_a)
+	int	track_rb;
+
+	track_rb = 0;
+	while (stack_b->arg != highest)
 	{
-		if (stack_a->arg == arg)
-			return (1);
-		if (stack_a->arg == pivot)
-			return (2);
-		stack_a = stack_a->next;
+		rot_up(&stack_b);
+		track_rb++;
 	}
-	return (0);
+	return (track_rb);
 }
 
-int	get_current_pos(t_args *stack_a, int arg, int pivot, int choice)
+int		how_many_rrb(t_args *stack_b, int highest)
 {
-	int	i;
+	int	track_rrb;
 
-	i = 0;
-	while (stack_a)
+	track_rrb = 0;
+	while (stack_b->arg != highest)
 	{
-		if (stack_a->arg == arg && choice == 1)
-			return (i);
-		if (stack_a->arg == pivot && choice == 2)
-			return (i);
-		stack_a = stack_a->next;
-		i++;
+		rot_down(&stack_b);
+		track_rrb++;
 	}
-	return (i);
+	return (track_rrb);
 }
 
-void	right_to_left(t_args **stack_a, t_args **stack_b, int arg, int pivot)
+void	stack_b_sort(t_args **stack_a, t_args **stack_b)
 {
-	int	pos;
-	int	piv_pos;
-	t_args	*head;
+	int		i;
+	int		highest;
+	int		track_rb;
+	int		track_rrb;
 
-	piv_pos = -1;
-	pos = 0;
-	while ((*stack_a)->prev)
-		(*stack_a) = (*stack_a)->prev;
-	head = (*stack_a);
-	pos = get_current_pos(*stack_a, arg, pivot, 1);
-	piv_pos = get_current_pos(*stack_a, arg, pivot, 2);
-	if (piv_pos == 0 && pos == 1 && (*stack_a)->arg == arg)
-		call_exec(stack_a, stack_b, "sa");
-	else
-	{
-		while (1)
-		{
-			pos = get_current_pos(*stack_a, arg, pivot, 1);
-			piv_pos = get_current_pos(*stack_a, arg, pivot, 2);
-			if (pos < piv_pos)
-				break ;
-			call_exec(stack_a, stack_b, "rra");
-		}
-	}
-
-}
-
-int		check_before_pivot(t_args *stack_a, int pivot)
-{
-	int	i;
-
-	i = 0;
-	while (stack_a && stack_a->arg != pivot)
-	{
-		if (stack_a->arg < pivot)
-			i++;
-		stack_a = stack_a->next;
-	}
-	return (i);
-}
-
-int		is_done_pivot(t_args *stack_a, int pivot)
-{
-	while (stack_a)
-	{
-		if (stack_a->arg > pivot)
-			return (0);
-		stack_a = stack_a->next;
-	}
-	return (1);
-}
-
-void	stack_to_end(t_args **stack_ab)
-{
-	while ((*stack_ab)->next)
-		(*stack_ab) = (*stack_ab)->next;
-}
-
-int		partition(t_args **stack_a, t_args **stack_b, int lowest, int highest)
-{
-	int	pivot;
-	int	i;
-	int	side;
-	int	len;
-	int	j;
-	t_args	*head;
-
-	head = (*stack_a);
-	pivot = (*stack_a)->arg;
-	if (pivot == get_lowest_arg(*stack_a) && (*stack_a)->next)
-		pivot = (*stack_a)->next->arg;
+	track_rrb = 0;
+	highest = get_highest_arg(*stack_b);
 	i = -1;
-	j = lowest;
-	while ((*stack_a && !is_done_pivot(head, pivot) && j <= highest - 1))
+	while ((*stack_b))
 	{
-		if (!(*stack_a)->prev)
-			head = (*stack_a);
-		if ((*stack_a)->arg == pivot)
-			(*stack_a) = (*stack_a)->next;
-		side = which_side(head, (*stack_a)->arg, pivot);
-		len = check_before_pivot(head, pivot);
-		if (len)
+		track_rb = how_many_rb(*stack_b, highest);
+		track_rrb = how_many_rrb(*stack_b, highest);
+		if (track_rb < track_rrb)
 		{
-			i = -1;
-			while (++i < len)
-				call_exec(stack_a, stack_b, "pb");
+			while (++i < track_rb)
+				call_exec(stack_a, stack_b, "rb");
 		}
-		else if (((*stack_a)->arg > pivot && side == 2) || ((*stack_a)->arg == pivot))
+		else
 		{
-			(*stack_a) = (*stack_a)->next;
+			while (++i < track_rrb)
+				call_exec(stack_a, stack_b, "rrb");
 		}
-		else if ((*stack_a)->arg < pivot && side == 2)
-		{
-			right_to_left(stack_a, stack_b, (*stack_a)->arg, pivot);
-		}
-		else if ((*stack_a)->arg < pivot && side == 1)
-		{
-			call_exec(stack_a, stack_b, "pb");
-			j++;
-		}
-		else if ((*stack_a)->arg > pivot && side == 1)
-		{
-			while (which_side(head, (*stack_a)->arg, pivot) == 1)
-				call_exec(stack_a, stack_b, "ra");
-		}
-	}
-	while (*stack_b)
 		call_exec(stack_a, stack_b, "pa");
-	return (j + 1);
+	}
 }
 
-int		quick_sort(t_args **stack_a, t_args **stack_b, int lowest, int highest)
+void	stack_a_sort(t_args **stack_a, t_args **stack_b, int pivot)
 {
-	int	part;
+	int	i;
+	int	mult_pivots[pivot + 1];
+	int	num_check;
 
-	if (lowest < highest)
+	i = -1;
+	num_check = -1;
+	while (++i < pivot)
+		mult_pivots[i] = pivot * i + 1;
+	i = 0;
+	while ((*stack_a) && !check_if_done(*stack_a))
 	{
-		part = partition(stack_a, stack_b, lowest, highest);
-		quick_sort(stack_a, stack_b, lowest, part - 1);
-		quick_sort(stack_a, stack_b, part + 1, highest);
+		while ((*stack_a) && num_check != (*stack_a)->arg
+		&& mult_pivots[i] != (*stack_a)->arg)
+		{
+			if ((*stack_a)->arg <= mult_pivots[i])
+				call_exec(stack_a, stack_b, "pb");
+			else
+			{
+				num_check = (*stack_a)->arg;
+				call_exec(stack_a, stack_b, "ra");//instead of just doing ra 
+				//figure out which will get you to a number <= multpivot[i] faster
+			}
+		}
+		if (i == pivot - 1 && (*stack_a)->arg != mult_pivots[i])
+			call_exec(stack_a, stack_b, "pb");
+		if (i < pivot - 1)
+			i++;
 	}
-	return (1);
 }
