@@ -214,6 +214,8 @@ void	make_merge_perfect(t_args **stack_a, t_args **stack_b)
 
 int		get_last_arg(t_args *stack_ab)
 {
+	if (stack_ab == NULL)
+		return (0);
 	while (stack_ab->next)
 		stack_ab = stack_ab->next;
 	return (stack_ab->arg);
