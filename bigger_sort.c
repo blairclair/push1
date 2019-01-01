@@ -89,14 +89,21 @@ int		get_pos_no_one(t_args *stack_a, int arg)
 	return (i);
 }
 
+int		get_average_highest(t_args *stack_ab, int highest)
+{
+	while (stack_ab && stack_ab <= highest)
+	{
+		stack_ab = stack_ab->next;
+	}
+}
+
 void	split(t_args **stack_a, t_args **stack_b, int highest)
 {
-	int	i;
+	int	pos;
 	int	check;
 
-	i = 0;
 	check = 0;
-	while ((*stack_a))
+	
 }
 
 void	recursive_function(t_args **stack_a, t_args **stack_b)
