@@ -406,7 +406,7 @@ void	merge(int nums[], int left, int middle, int right)
 	j = -1;
 	i = -1;
 	while (++i < (middle - left + 1))
-		temp1[i] = nums[i + 1];
+		temp1[i] = nums[left + i];
 	while (++j < (right - middle))
 		temp2[j] = nums[middle + 1 + j];
 	i = 0;
@@ -452,7 +452,6 @@ void	merge_sort(int nums[], int left, int right)
 		merge(nums, left, middle, right);
 	}
 }
-
 int		actual_sort(t_args *stack_a)
 {
 	int	nums[stack_a->num_args + 1];
@@ -467,19 +466,13 @@ int		actual_sort(t_args *stack_a)
 		len++;
 		stack_a = stack_a->next;
 	}
-	len = sizeof(nums) / sizeof(nums[0]);
-	merge_sort(nums, 0, len);
-	while (i < len)
-	{
-		printf("ni: %d\n", nums[i]);
-		i++;
-	}
-	return (i);
+	nums[len + 1] = '\0';
+	merge_sort(nums, 0, len - 1);
+	return (nums[len / 2]);
 }
 
 t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 {
-	// int	pivot;
 	int	lowest;
 
 	lowest = get_lowest_arg(stack_a);
@@ -490,11 +483,7 @@ t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 		push_swap_simple(&stack_a, &stack_b);
 	else
 	{
-		actual_sort(stack_a);
-		// pivot = sqrt(stack_a->num_args);
-		// stack_a_sort(&stack_a, &stack_b);
-		// stack_b_sort(&stack_a, &stack_b);
-			
+		stack_a = recursive_push_swap(stack_a, stack_b);
 	}
 	return (stack_a);
 }

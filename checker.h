@@ -46,4 +46,6 @@ int					get_lowest_arg(t_args *stack_ab);
 int					get_highest_arg(t_args *stack_ab);
 void				stack_a_sort(t_args **stack_a, t_args **stack_b);
 void				stack_b_sort(t_args **stack_a, t_args **stack_b);
+void				separate_stacks(t_args **stack_a, t_args **stack_b, int pivot);
+t_args				*recursive_push_swap(t_args *stack_a, t_args *stack_b);
 #endif
