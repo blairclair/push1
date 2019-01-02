@@ -39,7 +39,10 @@ void	recursive_function(t_args **stack_a, t_args **stack_b, int *sorted_arr)
 	check = VALUE_AFTER_LAST;
 	while (((*stack_a)->arg == check
 	|| (*stack_a)->arg == sorted_arr[0]) && !check_if_done(*stack_a))
+	{
 		call_exec(stack_a, stack_b, "ra");
+		check = VALUE_AFTER_LAST;
+	}
 	recursive_function(stack_a, stack_b, sorted_arr);
 	if (get_pos_no_one(*stack_a, get_highest_arg(*stack_b), sorted_arr[0]) >= 20)
 		split(stack_a, stack_a, get_highest_arg((*stack_b)), sorted_arr);
@@ -98,11 +101,13 @@ int		get_value_after_last(t_args *stack_ab, int *sorted_arr, int num_args)
 		stack_ab = stack_ab->next;
 	while (i < num_args)
 	{
-		if (sorted_arr[i] == stack_ab->arg)
+		if (sorted_arr[i] == stack_ab->arg && i + 1 != num_args)
 			return (sorted_arr[i + 1]);
+		if (i + 1 == num_args)
+			return (sorted_arr[i]);
 		i++;
 	}
-	return (sorted_arr[i]);
+	return (sorted_arr[i - 1]);
 }
 
 void	go_to_a(t_args **stack_a, t_args **stack_b, int *sorted_arr)
