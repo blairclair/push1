@@ -47,10 +47,11 @@ int					get_highest_arg(t_args *stack_ab);
 void				stack_a_sort(t_args **stack_a, t_args **stack_b);
 void				stack_b_sort(t_args **stack_a, t_args **stack_b);
 void				separate_stacks(t_args **stack_a, t_args **stack_b, int pivot);
-t_args				*recursive_push_swap(t_args *stack_a, t_args *stack_b);
-void				recursive_function(t_args **stack_a, t_args **stack_b);
-void				split(t_args **stack_a, t_args **stack_b, int highest);
-void				back_to_before(t_args **stack_a, t_args **stack_b, int highest);
-void				go_to_a(t_args **stack_a, t_args **stack_b);
-int					get_pos_no_one(t_args *stack_a, int arg);
+t_args				*recursive_push_swap(t_args *stack_a, t_args *stack_b, int *arr);
+void				recursive_function(t_args **stack_a, t_args **stack_b, int *sorted_arr);
+void				split(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr);
+void				back_to_before(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr);
+void				go_to_a(t_args **stack_a, t_args **stack_b, int *sorted_arr);
+int					get_pos_no_one(t_args *stack_a, int arg, int lowest);
+int					*actual_sort(t_args *stack_a);
 #endif

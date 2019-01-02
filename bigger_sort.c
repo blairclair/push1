@@ -29,23 +29,22 @@ int		get_average(t_args *stack_ab)
 	return (num);	
 }
 
-void	recursive_function(t_args **stack_a, t_args **stack_b)
+void	recursive_function(t_args **stack_a, t_args **stack_b, int *sorted_arr)
 {
-	int	highest;
-	int	average;
+	int	check;
 
 	if ((*stack_b) == NULL || (*stack_b)->num_args == 0)
 		return ;
-	average = get_average(*stack_a);
-	highest = get_highest_arg(*stack_b);
 	go_to_a(stack_a, stack_b);
-	while (((*stack_a)->arg == get_last_arg(*stack_a) + 1
-	|| (*stack_a)->arg == 1) && !check_if_done(*stack_a))
+	check = get_value_after_last(*stack_a, sorted_arr,
+	(*stack_a)->num_args + (*stack_b)->num_args);
+	while (((*stack_a)->arg == check
+	|| (*stack_a)->arg == sorted_arr[0]) && !check_if_done(*stack_a))
 		call_exec(stack_a, stack_b, "ra");
-	recursive_function(stack_a, stack_b);
-	if (get_pos_no_one(*stack_a, highest))
-		split(stack_a, stack_a, get_highest_arg((*stack_b)));
-	back_to_before(stack_a, stack_b, highest);
+	recursive_function(stack_a, stack_b, sorted_arr);
+	if (get_pos_no_one(*stack_a, get_highest_arg(*stack_b), lowest) >= 20)
+		split(stack_a, stack_a, get_highest_arg((*stack_b)), sorted_arr);
+	back_to_before(stack_a, stack_b, get_highest_arg(*stack_b), sorted_arr);
 }
 
 int		get_pos_arg(t_args *stack_ab, int arg)
@@ -70,16 +69,53 @@ int	get_value_from_pos(t_args *stack_ab, int pos)
 		stack_ab = stack_ab->next;
 		pos--;
 	}
-	return (stack_a->arg);
+	return (stack_ab->arg);
 }
 
-void	go_to_a(t_args **stack_a, t_args **stack_b)
+int		get_num_args(t_args *stack_a, t_args *stack_b)
+{
+	int	i;
+
+	i = 0;
+	while (stack_a)
+	{
+		i++;
+		stack_a = stack_a->next;
+	}
+	while (stack_b)
+	{
+		i++;
+		stack_b = stack_b->next;
+	}
+	return (i);
+}
+
+int		get_value_after_last(t_args *stack_ab, int *sorted_arr, int num_args)
+{
+	int	i;
+	int	num_args;
+
+	i = 0;
+	while (stack_ab->next)
+		stack_ab = stack_ab->next;
+	while (i < num_args)
+	{
+		if (sorted_arr[i] == stack_ab->arg)
+			return (sorted_arr[i + 1]);
+		i++;
+	}
+}
+
+void	go_to_a(t_args **stack_a, t_args **stack_b, int *sorted_arr)
 {
 	int	highest_b;
 	int	last_a;
 	int	pos;
+	int	check;
 	
-	while ((*stack_b)->num_args > 0)
+	if (!*stack_b)
+		return ;
+	while ((*stack_b) && (*stack_b)->num_args > 0)
 	{
 		if ((*stack_b)->num_args < 13)
 		{
@@ -89,28 +125,53 @@ void	go_to_a(t_args **stack_a, t_args **stack_b)
 				call_exec(stack_a, stack_b, "pa");
 			else
 			{
-				if ((*stack_b)->arg == 1 || (*stack_b)->arg == last_a)
+				if (*stack_a)
+					check = get_value_after_last(*stack_a, sorted_arr,
+					(*stack_a)->num_args + (*stack_b)->num_args);
+				else
+					check = get_value_after_last(*stack_a,
+					sorted_arr,(*stack_b)->num_args);
+				if ((*stack_b)->arg == check || (*stack_b)->arg == sorted_arr[0])
 				{
 					call_exec(stack_a, stack_b, "pa");
 					call_exec(stack_a, stack_b, "ra");
 				}
 				else
-					pos = get_pos_arg(*stack_a, get_highest_arg(*stack_a));
-					if (pos <= (*stack_a)->num_args / 2)
-						call_exec(stack_a, stack_b, "rrb");
+				{
+					pos = get_pos_arg(*stack_b, get_highest_arg(*stack_b));
+					if (pos <= (*stack_b)->num_args / 2)
+						call_exec(stack_a, stack_b, "rb");
 					else
 						call_exec(stack_a, stack_b, "rrb");
+				}
+			}
+		}
+		else
+		{
+			if (get_average(*stack_b) <= (*stack_b)->arg)
+				call_exec(stack_a, stack_b, "pa");
+			else
+			{
+				check = get_value_after_last(*stack_a, sorted_arr,
+				(*stack_a)->num_args + (*stack_a)->num_args);
+				if ((*stack_b)->arg == check || (*stack_b)->arg == sorted_arr[0])
+				{
+					call_exec(stack_a, stack_b, "pa");
+					call_exec(stack_a, stack_b, "ra");
+				}
+				else
+					call_exec(stack_a, stack_b, "rb");
 			}
 		}
 	}
 }
 
-int		get_pos_no_one(t_args *stack_a, int arg)
+int		get_pos_no_one(t_args *stack_a, int arg, int lowest)
 {
 	int	i;
 
 	i = 0;
-	while (stack_a && stack_a->arg <= arg && stack_a->arg != 1)
+	while (stack_a && stack_a->arg <= arg && stack_a->arg != lowest)
 	{
 		i++;
 		stack_a = stack_a->next;
@@ -118,14 +179,14 @@ int		get_pos_no_one(t_args *stack_a, int arg)
 	return (i);
 }
 
-int		get_average_highest(t_args *stack_ab, int highest)
+int		get_average_highest(t_args *stack_ab, int highest, int lowest)
 {
 	int	pos;
 	int	num;
 
 	pos = 0;
 	num = 0;
-	while (stack_ab && stack_ab->arg <= highest)
+	while (stack_ab && stack_ab->arg <= highest && stack_ab->arg != lowest)
 	{
 		num += stack_ab->arg;
 		pos++;
@@ -134,29 +195,35 @@ int		get_average_highest(t_args *stack_ab, int highest)
 	return (num / pos);
 }
 
-void	back_to_before(t_args **stack_a, t_args **stack_b, int highest)
+void	back_to_before(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr)
 {
-	while (*stack_a && (*stack_a)->arg <= highest && (*stack_a)->arg != 1)
+	int	check;
+
+	while (*stack_a && (*stack_a)->arg <= highest && (*stack_a)->arg != sorted_arr[0])
 	{
-		if ((*stack_a)->arg == get_last_arg(*stack_a))
+		check = get_value_after_last(*stack_a, sorted_arr,
+	(*stack_a)->num_args + (*stack_b)->num_args);
+		if ((*stack_a)->arg == check)
 			call_exec(stack_a, stack_b, "ra");
 		else
 			call_exec(stack_a, stack_b, "pb");
 	}
-	if (get_lowest_arg(*stack_b) == get_last_arg(*stack_a) + 1)
-		recursive_function(stack_a, stack_b);
+	check = get_value_after_last(*stack_a, sorted_arr,
+	(*stack_a)->num_args + (*stack_b)->num_args);
+	if (get_lowest_arg(*stack_b) == check)
+		recursive_function(stack_a, stack_b, sorted_arr);
 }
 
-void	split(t_args **stack_a, t_args **stack_b, int highest)
+void	split(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr)
 {
 	int	pos;
 	int	check;
 
 	check = 0;
-	pos = get_average_highest(*stack_a, highest);
-	while ((*stack_a)->arg <= highest && (*stack_a)->arg != 1)
+	pos = get_average_highest(*stack_a, highest, sorted_arr[0]);
+	while ((*stack_a) && (*stack_a)->arg <= highest && (*stack_a)->arg != sorted_arr[0])
 	{
-		if ((*stack_a)->arg == pos)
+		if ((*stack_a)->arg >= pos)
 		{
 			call_exec(stack_a, stack_b, "ra");
 			check++;
@@ -173,13 +240,14 @@ void	split(t_args **stack_a, t_args **stack_b, int highest)
 			call_exec(stack_a, stack_b, "rra");
 		pos++;
 	}
-	if (get_lowest_arg(*stack_b) == get_last_arg(*stack_a) + 1)
-		recursive_function(stack_a, stack_b);
+	if (get_lowest_arg(*stack_b) == get_value_after_last(*stack_a, sorted_arr,
+	(*stack_a)->num_args + (*stack_b)->num_args) && check > 0)
+		recursive_function(stack_a, stack_b, sorted_arr);
 }
 
 
 
-t_args	*recursive_push_swap(t_args *stack_a, t_args *stack_b)
+t_args	*recursive_push_swap(t_args *stack_a, t_args *stack_b, int *sorted_arr)
 {
 	int pivot_a;
 	int	pos;
@@ -193,13 +261,14 @@ t_args	*recursive_push_swap(t_args *stack_a, t_args *stack_b)
 		else
 			call_exec(&stack_a, &stack_b, "ra");
 	}
+	recursive_function(&stack_a, &stack_b, sorted_arr);
 	highest_a = get_highest_arg(stack_a);
-	pos = get_pos_no_one(stack_a, highest_a);
+	pos = get_pos_no_one(stack_a, highest_a, sorted_arr[0]);
 	if (pos >= 20)
 	{
-		split(&stack_a, &stack_b, highest_a);
-		split(&stack_a, &stack_b, highest_a);
+		split(&stack_a, &stack_b, get_highest_arg(stack_a), sorted_arr);
+		split(&stack_a, &stack_b, get_highest_arg(stack_a), sorted_arr);
 	}
-	back_to_before(&stack_a, &stack_b, highest_a);
+	back_to_before(&stack_a, &stack_b, highest_a, sorted_arr);
 	return (stack_a);
 }

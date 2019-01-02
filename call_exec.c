@@ -66,7 +66,6 @@ void	call_exec_two(t_args **stack_a, t_args **stack_b, char *choice)
 
 void	call_exec(t_args **stack_a, t_args **stack_b, char *choice)
 {
-	g_test_line_num++;
 	if (!ft_strcmp(choice, "ss"))
 	{
 		ft_printf("ss\n");

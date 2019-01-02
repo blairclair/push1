@@ -392,8 +392,6 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 			if (should_merge(stack_a, stack_b))
 				return (1);
 		}
-		if (g_test_line_num > 30)
-			return (1);
 	}
 }
 
@@ -454,14 +452,15 @@ void	merge_sort(int nums[], int left, int right)
 		merge(nums, left, middle, right);
 	}
 }
-int		actual_sort(t_args *stack_a)
+int		*actual_sort(t_args *stack_a)
 {
-	int	nums[stack_a->num_args + 1];
+	int	*nums;
 	int	len;
 	int	i;
 
 	len = 0;
 	i = 0;
+	nums = ft_memalloc(stack_a->num_args + 1);
 	while (stack_a)
 	{
 		nums[len] = stack_a->arg;
@@ -470,22 +469,24 @@ int		actual_sort(t_args *stack_a)
 	}
 	nums[len + 1] = '\0';
 	merge_sort(nums, 0, len - 1);
-	return (nums[len / 2]);
+	return (nums);
 }
 
 t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 {
 	int	lowest;
+	int	*sorted_arr;
 
 	lowest = get_lowest_arg(stack_a);
-	g_test_line_num = 0;
 	if (check_if_done(stack_a) && stack_b == NULL)
 		return (stack_a);
+	sorted_arr = actual_sort(stack_a);
+	
 	if (stack_a->num_args <= 5)
 		push_swap_simple(&stack_a, &stack_b);
 	else
 	{
-		stack_a = recursive_push_swap(stack_a, stack_b);
+		stack_a = recursive_push_swap(stack_a, stack_b, sorted_arr);
 	}
 	return (stack_a);
 }
