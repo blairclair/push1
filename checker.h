@@ -13,6 +13,7 @@
 #ifndef CHECKER_H
 # define CHECKER_H
 # include "libft/libft.h"
+# define VALUE_AFTER_LAST get_value_after_last(*stack_a, sorted_arr, ((*stack_b) ? (*stack_b)->num_args : 0) + (((*stack_a))? (*stack_a)->num_args : 0));
 
 typedef struct		s_args
 {
@@ -54,4 +55,5 @@ void				back_to_before(t_args **stack_a, t_args **stack_b, int highest, int *sor
 void				go_to_a(t_args **stack_a, t_args **stack_b, int *sorted_arr);
 int					get_pos_no_one(t_args *stack_a, int arg, int lowest);
 int					*actual_sort(t_args *stack_a);
+int					get_value_after_last(t_args *stack_ab, int *sorted_arr, int num_args);
 #endif

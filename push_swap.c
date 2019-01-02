@@ -460,7 +460,7 @@ int		*actual_sort(t_args *stack_a)
 
 	len = 0;
 	i = 0;
-	nums = ft_memalloc(stack_a->num_args + 1);
+	nums = ft_memalloc(stack_a->num_args * sizeof(int*) + 5);
 	while (stack_a)
 	{
 		nums[len] = stack_a->arg;
