@@ -14,7 +14,7 @@
 
 int		get_average(t_args *stack_ab)
 {
-	int	num;
+	float	num;
 	int	i;
 
 	num = 0;
@@ -25,8 +25,7 @@ int		get_average(t_args *stack_ab)
 		stack_ab = stack_ab->next;
 		i++;
 	}
-	num /= i;
-	return (num);	
+	return ((int)(num / i + 0.5));	
 }
 
 void	recursive_function(t_args **stack_a, t_args **stack_b, int *sorted_arr)
@@ -54,10 +53,10 @@ int		get_pos_arg(t_args *stack_ab, int arg)
 	int	pos;
 
 	pos = 0;
-	while (stack_ab)
+	while (pos < stack_ab->num_args)
 	{
 		if (stack_ab->arg == arg)
-			return (pos);
+			return (pos + 1);
 		pos++;
 		stack_ab = stack_ab->next;
 	}
@@ -113,18 +112,20 @@ int		get_value_after_last(t_args *stack_ab, int *sorted_arr, int num_args)
 void	go_to_a(t_args **stack_a, t_args **stack_b, int *sorted_arr)
 {
 	int	highest_b;
-	int	last_a;
 	int	pos;
 	int	check;
+	int	len;
+	int	pivot;
 	
 	if (!*stack_b)
 		return ;
-	while ((*stack_b) && (*stack_b)->num_args > 0)
+	pivot = get_average(*stack_b);
+	len = (*stack_b)->num_args;
+	while ((*stack_b) && len-- > 0)
 	{
 		if ((*stack_b)->num_args < 13)
 		{
 			highest_b = get_highest_arg(*stack_b);
-			last_a = get_last_arg(*stack_a);
 			if (highest_b == (*stack_b)->arg)
 				call_exec(stack_a, stack_b, "pa");
 			else
@@ -147,7 +148,7 @@ void	go_to_a(t_args **stack_a, t_args **stack_b, int *sorted_arr)
 		}
 		else
 		{
-			if (get_average(*stack_b) <= (*stack_b)->arg)
+			if (pivot <= (*stack_b)->arg)
 				call_exec(stack_a, stack_b, "pa");
 			else
 			{
@@ -246,9 +247,11 @@ t_args	*recursive_push_swap(t_args *stack_a, t_args *stack_b, int *sorted_arr)
 	int pivot_a;
 	int	pos;
 	int	highest_a;
+	int	len;
 
+	len = stack_a->num_args;
 	pivot_a = get_average(stack_a);
-	while (get_lowest_arg(stack_a) < pivot_a)
+	while (len-- > 0)
 	{
 		if (stack_a->arg < pivot_a)
 			call_exec(&stack_a, &stack_b, "pb");
