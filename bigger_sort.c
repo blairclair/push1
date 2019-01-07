@@ -229,6 +229,17 @@ int highest, int *sorted_arr)
 		recursive_function(stack_a, stack_b, sorted_arr);
 }
 
+void	split_to_b(t_args **stack_a, t_args **stack_b, int pos, int *check)
+{
+	if ((*stack_a)->arg >= pos)
+	{
+		call_exec(stack_a, stack_b, "ra");
+		(*check)++;
+	}
+	else
+		call_exec(stack_a, stack_b, "pb");
+}
+
 void	split(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr)
 {
 	int	pos;
@@ -240,15 +251,7 @@ void	split(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr)
 	pos = get_average_highest(*stack_a, highest, sorted_arr[0]);
 	while ((*stack_a) && (*stack_a)->arg <= highest &&
 	(*stack_a)->arg != sorted_arr[0])
-	{
-		if ((*stack_a)->arg >= pos)
-		{
-			call_exec(stack_a, stack_b, "ra");
-			check++;
-		}
-		else
-			call_exec(stack_a, stack_b, "pb");
-	}
+		split_to_b(stack_a, stack_b, pos, &check);
 	pos = 0;
 	while (pos < check)
 	{
