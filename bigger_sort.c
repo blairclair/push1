@@ -46,7 +46,9 @@ void	recursive_function(t_args **stack_a, t_args **stack_b, int *sorted_arr)
 	}
 	recursive_function(stack_a, stack_b, sorted_arr);
 	if (get_pos_no_one(*stack_a, highest, sorted_arr[0]) >= 20)
-		split(stack_a, stack_a, highest, sorted_arr);
+	{
+		split(stack_a, stack_b, highest, sorted_arr);
+	}
 	back_to_before(stack_a, stack_b, highest, sorted_arr);
 }
 
@@ -189,13 +191,15 @@ int		get_average_highest(t_args *stack_ab, int highest, int lowest)
 
 	pos = 0;
 	num = 0;
+	if (!stack_ab)
+		return (0);
 	while (stack_ab && stack_ab->arg <= highest && stack_ab->arg != lowest)
 	{
 		num += stack_ab->arg;
 		pos++;
 		stack_ab = stack_ab->next;
 	}
-	return (num / pos);
+	return ((int)(num / pos + 0.5));
 }
 
 void	back_to_before(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr)
@@ -221,6 +225,8 @@ void	split(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr)
 	int	check;
 
 	check = 0;
+	if (!*stack_a)
+		return ;
 	pos = get_average_highest(*stack_a, highest, sorted_arr[0]);
 	while ((*stack_a) && (*stack_a)->arg <= highest && (*stack_a)->arg != sorted_arr[0])
 	{
