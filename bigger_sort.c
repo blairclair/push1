@@ -253,6 +253,8 @@ t_args	*recursive_push_swap(t_args *stack_a, t_args *stack_b, int *sorted_arr)
 	int	highest_a;
 	int	len;
 
+	if (check_if_done(stack_a))
+		return (stack_a);
 	len = stack_a->num_args;
 	pivot_a = get_average(stack_a);
 	while (len-- > 0)
