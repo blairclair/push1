@@ -41,7 +41,6 @@ int	check_num(char **str, int *dup_check, int i)
 		if (!ft_isnumber(str[i]) || num > 2147483647 ||
 		num < -2147483648 || !is_dup(dup_check, num))
 		{
-			free(dup_check);
 			return (0);
 		}
 		dup_check[i - 1] = num;
