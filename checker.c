@@ -6,7 +6,7 @@
 /*   By: agrodzin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 20:41:53 by agrodzin          #+#    #+#             */
-/*   Updated: 2018/12/18 20:41:54 by agrodzin         ###   ########.fr       */
+/*   Updated: 2019/01/08 11:10:06 by agrodzin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 {
-    if (!ft_strcmp(buf, "sa"))
-        ft_num_swap_individual(stack_a);
+	if (!ft_strcmp(buf, "sa"))
+		ft_num_swap_individual(stack_a);
 	else if (!ft_strcmp(buf, "sb"))
 		ft_num_swap_individual(stack_b);
 	else if (!ft_strcmp(buf, "ss"))
@@ -37,7 +37,7 @@ void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 		rot_up(stack_b);
 	}
 	else if (!ft_strcmp(buf, "rra"))
-        rot_down(stack_a);
+		rot_down(stack_a);
 	else if (!ft_strcmp(buf, "rrb"))
 		rot_down(stack_b);
 	else if (!ft_strcmp(buf, "rrr"))
@@ -46,17 +46,17 @@ void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 		rot_down(stack_b);
 	}
 	else
-        ft_putstr_fd("Error\n", 2);
+		ft_putstr_fd("Error\n", 2);
 }
 
 void    get_input(t_args *stack_a, t_args *stack_b)
 {
-    char    *line;
+	char    *line;
 
 	while (get_next_line(0, &line) > 0)
-    {
-        swap_cmds(line, &stack_a, &stack_b);
-    }
+	{
+		swap_cmds(line, &stack_a, &stack_b);
+	}
 	if (stack_b == NULL && check_if_done(stack_a))
 		ft_printf("OK\n");
 	else
@@ -65,14 +65,14 @@ void    get_input(t_args *stack_a, t_args *stack_b)
 
 int main(int argc, char *argv[])
 {
-    t_args  *stack_a;
-    t_args  *stack_b;
-    int     check;
+	t_args  *stack_a;
+	t_args  *stack_b;
+	int     check;
 	char	**str;
 
 	stack_b = NULL;
 	stack_a = NULL;
-   	if ((check = is_safe(argc, argv)) <= 0)
+	if ((check = is_safe(argc, argv)) <= 0)
 	{
 		if (check == -1)
 			ft_putstr_fd("Error\n", 2);
@@ -81,11 +81,17 @@ int main(int argc, char *argv[])
 	else if (check == 3)
 	{
 		str = ft_strsplit(argv[1], ' ');
-    	init_stack_a(&stack_a, count_num_2d_args(str), str, 0);
+		init_stack_a(&stack_a, count_num_2d_args(str), str, 0);
 	}
 	else
 		init_stack_a(&stack_a, argc - 1, argv, 1);
-    get_input(stack_a, stack_b);
-	// sleep(30);
-    return (0);
+	get_input(stack_a, stack_b);
+	while (stack_a)
+	{
+		stack_b = stack_a->next;
+		free(stack_a);
+		stack_a = stack_b;
+	}
+	sleep(30);
+	return (0);
 }

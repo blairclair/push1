@@ -10,22 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"	
+#include "push_swap.h"
 
 int		get_average(t_args *stack_ab)
 {
 	float	num;
-	int	i;
+	int		i;
 
 	num = 0;
 	i = 0;
 	while (stack_ab)
 	{
-		num += stack_ab->arg; 
+		num += stack_ab->arg;
 		stack_ab = stack_ab->next;
 		i++;
 	}
-	return ((int)(num / i + 0.5));	
+	return ((int)(num / i + 0.5));
 }
 
 void	recursive_function(t_args **stack_a, t_args **stack_b, int *sorted_arr)
@@ -165,7 +165,7 @@ void	go_to_a(t_args **stack_a, t_args **stack_b, int *sorted_arr)
 {
 	int	len;
 	int	pivot;
-	
+
 	if (!*stack_b)
 		return ;
 	pivot = get_average(*stack_b);
