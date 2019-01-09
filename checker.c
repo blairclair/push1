@@ -12,6 +12,21 @@
 
 #include "checker.h"
 
+void	ps_lstdel(t_args **alst)
+{
+	t_args	*n_list;
+	t_args	*next1;
+
+	n_list = *alst;
+	while (n_list)
+	{
+		next1 = n_list->next;
+		free(n_list);
+		n_list = next1;
+		*alst = NULL;
+	}
+}
+
 void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 {
 	if (!ft_strcmp(buf, "sa"))
@@ -86,12 +101,7 @@ int main(int argc, char *argv[])
 	else
 		init_stack_a(&stack_a, argc - 1, argv, 1);
 	get_input(stack_a, stack_b);
-	while (stack_a)
-	{
-		stack_b = stack_a->next;
-		free(stack_a);
-		stack_a = stack_b;
-	}
+	// ps_lstdel(&stack_a);
 	sleep(30);
 	return (0);
 }

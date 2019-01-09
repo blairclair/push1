@@ -489,6 +489,7 @@ t_args	*push_swap(t_args *stack_a, t_args *stack_b)
 	{
 		stack_a = recursive_push_swap(stack_a, stack_b, sorted_arr);
 	}
+	free(sorted_arr);
 	return (stack_a);
 }
 
@@ -515,4 +516,6 @@ int		main(int argc, char *argv[])
 	else
 		init_stack_a(&stack_a, argc - 1, argv, 1);
 	push_swap(stack_a, stack_b);
+	sleep(30);
+	return (0);
 }
