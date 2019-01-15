@@ -14,17 +14,15 @@
 
 void	ps_lstdel(t_args **alst)
 {
-	t_args	*n_list;
-	t_args	*next1;
+	t_args	*tmp;
 
-	n_list = *alst;
-	while (n_list)
+	while (*alst != NULL)
 	{
-		next1 = n_list->next;
-		free(n_list);
-		n_list = next1;
-		*alst = NULL;
+		tmp = *alst;
+		*alst = (*alst)->next;
+		free(tmp);
 	}
+	*alst = NULL;
 }
 
 void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
@@ -68,6 +66,7 @@ void    get_input(t_args *stack_a, t_args *stack_b)
 {
 	char    *line;
 
+
 	while (get_next_line(0, &line) > 0)
 	{
 		swap_cmds(line, &stack_a, &stack_b);
@@ -101,7 +100,7 @@ int main(int argc, char *argv[])
 	else
 		init_stack_a(&stack_a, argc - 1, argv, 1);
 	get_input(stack_a, stack_b);
-	// ps_lstdel(&stack_a);
-	// sleep(30);
+	ps_lstdel(&stack_a);
+	sleep(30);
 	return (0);
 }
