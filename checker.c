@@ -12,17 +12,17 @@
 
 #include "checker.h"
 
-void	ps_lstdel(t_args **alst)
+void	ps_lstdel(t_args *alst)
 {
 	t_args	*tmp;
 
-	while (*alst != NULL)
+	while (alst != NULL)
 	{
-		tmp = *alst;
-		*alst = (*alst)->next;
+		tmp = alst;
+		alst = (alst)->next;
 		free(tmp);
 	}
-	*alst = NULL;
+	alst = NULL;
 }
 
 void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
@@ -100,7 +100,8 @@ int main(int argc, char *argv[])
 	else
 		init_stack_a(&stack_a, argc - 1, argv, 1);
 	get_input(stack_a, stack_b);
-	ps_lstdel(&stack_a);
+	ps_lstdel(stack_a);
+	printf("arg: %d\n", stack_a->arg);
 	sleep(30);
 	return (0);
 }
