@@ -26,10 +26,11 @@ rng_poss.c
 NAME=checker
 NAME2=push_swap
 NAME3=test
+OBJ=$(SRCS:%.c=%.o)
 
 all: $(NAME)
 
-$(NAME): $(SRCS)
+$(NAME): $(OBJ)
 	make -C libft/
 	make -C libft/printf_functions/
 	$(CC) -c $(SRCS)
