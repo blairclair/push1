@@ -102,6 +102,6 @@ int main(int argc, char *argv[])
 		init_stack_a(&stack_a, argc - 1, argv, 1);
 	get_input(stack_a, stack_b);
 	// ps_lstdel(&stack_a);
-	sleep(30);
+	// sleep(30);
 	return (0);
 }
