@@ -12,16 +12,21 @@
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define BUFF_SIZE 200
+
+# define BUFF_SIZE 32
+
 # include "libft.h"
-struct	s_nums
+# include <stdlib.h>
+# include <unistd.h>
+
+#define LINCHK(x) if (!x) return (0);
+
+typedef struct      s_gnl
 {
-	int		j;
-	char	*whole2;
-	int		*k;
-	int		fd2;
-	char	buf[BUFF_SIZE + 1];
-};
+    int             fd;
+    char            *storage;
+    struct s_gnl    *next;
+}                   t_gnl;
 
 int		get_next_line(const int fd, char **line);
 

@@ -33,7 +33,7 @@ int	is_dup(int *dup_check, int num)
 
 int	check_num(char **str, int *dup_check, int i)
 {
-	int	num;
+	long long	num;
 
 	while (str[i])
 	{
@@ -43,7 +43,7 @@ int	check_num(char **str, int *dup_check, int i)
 		{
 			return (0);
 		}
-		dup_check[i - 1] = num;
+		dup_check[i] = num;
 		i++;
 	}
 	return (1);
@@ -63,11 +63,12 @@ int	is_safe(int argc, char *argv[])
 	if (ft_strlen(argv[1]) > 1 && is_ws(argv[1], 0))
 	{
 		str = ft_strsplit(argv[1], ' ');
+		argc = count_num_2d_args(str) + 1;
 		ret = 3;
 		i = 0;
 	}
 	else
-		str = argv;
+		str = argv + 1;
 	dup_check = ft_memalloc(argc * sizeof(int*) + 1);
 	if (!check_num(str, dup_check, i))
 		return (-1);

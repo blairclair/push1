@@ -71,20 +71,20 @@ void    print_list(t_args *stack_a, t_args *stack_b)
     ft_printf("stack a:\n");
     if (stack_a)
     {
-        printf("    num args: %d\n", stack_a->num_args);
+        ft_printf("    num args: %d\n", stack_a->num_args);
         while (stack_a)
         {
-            printf("%d\n", stack_a->arg);
+            ft_printf("%d\n", stack_a->arg);
             stack_a = stack_a->next;
         }
     }
     ft_printf("\nstack b:\n");
     if (stack_b)
     {
-        printf("    num args: %d\n", stack_b->num_args);
+        ft_printf("    num args: %d\n", stack_b->num_args);
         while (stack_b)
         {
-            printf("%d\n", stack_b->arg);
+            ft_printf("%d\n", stack_b->arg);
             stack_b = stack_b->next;
         }
     }

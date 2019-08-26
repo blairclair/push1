@@ -141,7 +141,7 @@ int		main()
     	init_stack_a(&stack_a, count_num_2d_args(str), str, 0);
 		push_swap(stack_a, stack_b);
 		if (g_test_line_num > 12)
-			printf("arg: %s\n", arg[i]);
+			ft_printf("arg: %s\n", arg[i]);
 		i++;
 	}
 	return (0);

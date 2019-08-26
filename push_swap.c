@@ -472,24 +472,41 @@ int		*actual_sort(t_args *stack_a)
 	return (nums);
 }
 
+void	push_swap_extra_simple(t_args **stack_a, t_args **stack_b){
+	if ((*stack_a)->num_args == 2)
+		call_exec(stack_a, stack_b, "sa");
+	else{
+		if ((*stack_a)->arg > (*stack_a)->next->arg && (*stack_a)->next->arg < (*stack_a)->next->next->arg)
+			call_exec(stack_a, stack_b, "sa");
+		else if ((*stack_a)->arg < (*stack_a)->next->arg && (*stack_a)->next->arg > (*stack_a)->next->next->arg && (*stack_a)->arg < (*stack_a)->next->next->arg)
+		{
+			call_exec(stack_a, stack_b, "pb");
+			call_exec(stack_a, stack_b, "sa");
+			call_exec(stack_a, stack_b, "pa");
+		}
+		else if ((*stack_a)->arg  > (*stack_a)->next->arg && (*stack_a)->next->arg > (*stack_a)->next->next->arg)
+		{
+			call_exec(stack_a, stack_b, "ra");
+			call_exec(stack_a, stack_b, "sa");
+		}
+		else if ((*stack_a)->arg < (*stack_a)->next->arg && (*stack_a)->next->arg > (*stack_a)->next->next->arg && (*stack_a)->arg > (*stack_a)->next->next->arg)
+			call_exec(stack_a, stack_b, "rra");
+	}
+}
+
 void	push_swap(t_args *stack_a, t_args *stack_b)
 {
-	int	lowest;
 	int	*sorted_arr;
 
-	lowest = get_lowest_arg(stack_a);
 	if (check_if_done(stack_a) && stack_b == NULL)
-	{
 		return ;
-	}
 	sorted_arr = actual_sort(stack_a);
-	if (stack_a->num_args <= 5)
+	if (stack_a->num_args <= 3)
+		push_swap_extra_simple(&stack_a, &stack_b);
+	else if (stack_a->num_args <= 5)
 		push_swap_simple(&stack_a, &stack_b);
 	else
-	{
 		stack_a = recursive_push_swap(stack_a, stack_b, sorted_arr);
-	}
-	free(sorted_arr);
 }
 
 int		main(int argc, char *argv[])

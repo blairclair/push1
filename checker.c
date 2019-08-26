@@ -12,17 +12,33 @@
 
 #include "checker.h"
 
-void	ps_lstdel(t_args *alst)
-{
-	t_args	*tmp;
-
-	while (alst != NULL)
+int		loc_char(char *str, char c){
+	int	i;
+	i = 0;
+	while (str[i])
 	{
-		tmp = alst;
-		alst = (alst)->next;
-		free(tmp);
+		if (str[i] == c)
+		{
+			return i;
+		}
+		i++;
 	}
-	alst = NULL;
+	return -1;
+}
+
+void	ps_lstdel(t_args **alst)
+{
+	t_args	*n_list;
+	t_args	*next1;
+
+	n_list = *alst;
+	while (n_list)
+	{
+		next1 = n_list->next;
+		free(n_list);
+		n_list = next1;
+		*alst = NULL;
+	}
 }
 
 void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
@@ -60,21 +76,25 @@ void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 	}
 	else
 		ft_putstr_fd("Error\n", 2);
+	print_list(*stack_a, *stack_b);
 }
 
 void    get_input(t_args *stack_a, t_args *stack_b)
 {
 	char    *line;
+	int		ret;
 
-
-	while (get_next_line(0, &line) > 0)
+	line = ft_memalloc(5 * sizeof(char));
+	while ((ret = get_next_line(0, &line)))
 	{
+		line[ft_strlen(line)] = '\0';
 		swap_cmds(line, &stack_a, &stack_b);
 	}
 	if (stack_b == NULL && check_if_done(stack_a))
 		ft_printf("OK\n");
 	else
 		ft_printf("KO\n");
+	free(line);
 }
 
 int main(int argc, char *argv[])
@@ -100,8 +120,7 @@ int main(int argc, char *argv[])
 	else
 		init_stack_a(&stack_a, argc - 1, argv, 1);
 	get_input(stack_a, stack_b);
-	ps_lstdel(stack_a);
-	printf("arg: %d\n", stack_a->arg);
-	sleep(30);
+	// ps_lstdel(&stack_a);
+	// printf("arg: %d\n", stack_a->arg);
 	return (0);
 }

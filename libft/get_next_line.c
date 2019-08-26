@@ -10,78 +10,111 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "get_next_line.h"
-int	check_if_line_done(char *temp_whole2, int i, struct s_nums *nums, char **line)
-{
-	static int num_tries[2000];
 
-	ft_bzero(line[0], ft_strlen(line[0]));
-	if (temp_whole2[i] != '\0' || (temp_whole2[i] == '\0' &&
-		num_tries[nums->fd2] != 3 && temp_whole2[i - 1] == '\n'))
+/*
+** @Function: appends the data read into buffer to f->storage
+** @Param 1: The gnl structure.
+** @Return: the length of the data read in.
+*/
+
+static int		lineset(t_gnl *f)
+{
+	char	*buffer;
+	int		ret;
+    char    *tmp;
+
+    buffer = ft_strnew(BUFF_SIZE + 1);
+	if ((ret = read(f->fd, buffer, BUFF_SIZE)) > 0)
 	{
-		line[0] = malloc((i - 1) - nums->j);
-		line[0] = ft_memmove(line[0], temp_whole2 + nums->j, (i - 1) - nums->j);
-		line[0][(i - 1) - nums->j] = '\0';
-		if (temp_whole2[i] == '\0')
-			num_tries[nums->fd2] = 3;
-		return (1);
+		buffer[ret] = '\0';
+        tmp = f->storage;
+		f->storage = ft_strjoin(f->storage, buffer);
+        ft_strdel(&tmp);
 	}
-	else if (temp_whole2[i] == '\0' &&
-			num_tries[nums->fd2] != 3 && temp_whole2[i - 1] != '\n')
-	{
-		line[0] = malloc((i + 1) - nums->j);
-		line[0] = ft_memmove(line[0], temp_whole2 + nums->j, (i + 1) - nums->j);
-		line[0][(i + 1) - nums->j] = '\0';
-		num_tries[nums->fd2] = 3;
-		return (0);
-	}
-	else if (num_tries[nums->fd2] == 3)
-		return (3);
-	return (1);
+    ft_strdel(&buffer);
+	return (ret);
 }
 
-int	check_while(char *whole2, int i)
+/*
+** @Function: Determines the list element associated with
+** @Param 1: the t_gnl pointer, whose member f->storage will be changed.
+** @Param 2: The string pointer to be set to the buffer storing the newline.
+** @Return: Same values as get_next_line
+*/
+
+static t_gnl	*determine_file(const int fd, t_gnl **master_list)
 {
-	while (whole2[i])
+	t_gnl *ptr;
+
+	ptr = *master_list;
+	while (ptr && ptr->fd != fd)
+		ptr = ptr->next;
+	if (!ptr)
 	{
-		if ((whole2[i] == '\n' && whole2[i + 1] != '\0') || whole2[i] == '\0')
+		ptr = (t_gnl *)ft_memalloc(sizeof(t_gnl));
+		ptr->fd = fd;
+        if (!(ptr->storage = ft_strnew(0)))
+            return (NULL);
+		ptr->next = *master_list;
+		*master_list = ptr;
+	}
+	return (ptr);
+}
+
+/*
+** @Function: Sets the storage to the remaining part of the storage and
+** sets the line to the next_line.
+** @Param 1: the t_gnl pointer, whose member f->storage will be changed.
+** @Param 2: The string pointer to be set to the buffer storing the newline.
+** @Return: Same values as get_next_line
+*/
+
+static int          set_storage_and_line(t_gnl *f, char **line)
+{
+    int i;
+    char *tmp;
+
+    i = 0;
+    tmp = NULL;
+	while (!(ft_strchr(f->storage, '\n')))
+	{
+        i = lineset(f);
+		if (i < 0)
+			return (-1);
+		if (!i && (!(ft_strchr(f->storage, '\n'))))
 		{
-			i++;
-			return (i);
+			LINCHK(f->storage[0]);
+            *line = f->storage;
+			return (1);
 		}
-		i++;
 	}
-	return (i);
+	*line = ft_strsub(f->storage, 0, (ft_strchr(f->storage, '\n') - f->storage));
+    tmp = f->storage;
+	f->storage = ft_strdup(ft_strchr(f->storage, '\n') + 1);
+	ft_strdel(&tmp);
+    return (1);
 }
 
-int	get_next_line(const int fd, char **line)
-{
-	static int		i[2000];
-	static char		**temp_whole2;
-	int				check;
-	struct s_nums	nums;
+/*
+** @Function: Gets the next line from the file descriptor fd and stores it in
+** a buffer pointed to by line. Handles multiple file descriptors and stores
+** them as a Linked List. The head of the list is a static variable master_list
+** that maintains the list between function calls.
+** @Param 1: The file descriptor to read, obtained by opening a path with open
+** @Param 2: The pointer to the buffer that gnl uses to store the next line.
+** @Return: Returns 1 if line has been read, 0 if the reading is completed and
+** -1 if an error occurs.
+*/
 
-	nums.whole2 = "";
-	nums.fd2 = fd;
-	nums.whole2 = malloc(700);
-	if (fd < 0 || read(fd, 0, 0) < 0 || line == NULL)
+int				get_next_line(const int fd, char **line)
+{
+	static t_gnl	*master_list;
+	t_gnl			*f;
+
+	if (fd < 0 || !line)
 		return (-1);
-	line[0] = "";
-	nums.j = i[fd];
-	if (temp_whole2 == NULL)
-		temp_whole2 = malloc(700);
-	while ((check = read(fd, nums.buf, BUFF_SIZE)) > 0)
-	{
-		nums.buf[check] = '\0';
-		temp_whole2[fd] = ft_strjoin(nums.whole2, nums.buf);
-		nums.whole2 = temp_whole2[fd];
-		ft_bzero(nums.buf, BUFF_SIZE);
-	}
-	temp_whole2[fd][ft_strlen(temp_whole2[fd])] = '\0';
-	i[fd] = check_while(temp_whole2[fd], i[fd]);
-	check = check_if_line_done(temp_whole2[fd], i[fd], &nums, &*line);
-	return (check == 0 || check == 1 || check == 2 ? 1 : 0);
+	f = determine_file(fd, &master_list);
+    LINCHK(f->storage);
+    return (set_storage_and_line(f, line));
 }

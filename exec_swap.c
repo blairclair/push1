@@ -34,7 +34,6 @@ void	delete_node(t_args **head, int n)
 		pos->next->prev = pos->prev;
 	if (pos->prev != NULL)
 		pos->prev->next = pos->next;
-	free(pos);
 	pos = NULL;
 }
 
