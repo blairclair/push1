@@ -105,3 +105,19 @@ int		is_backwards(t_args *stack_a, int highest)
 	}
 	return (1);
 }
+
+
+void	ps_lstdel(t_args **alst)
+{
+	t_args	*n_list;
+	t_args	*next1;
+
+	n_list = *alst;
+	while (n_list)
+	{
+		next1 = n_list->next;
+		free(n_list);
+		n_list = next1;
+		*alst = NULL;
+	}
+}

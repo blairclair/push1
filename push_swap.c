@@ -532,6 +532,8 @@ int		main(int argc, char *argv[])
 	else
 		init_stack_a(&stack_a, argc - 1, argv, 1);
 	push_swap(stack_a, stack_b);
+	if (stack_a)
+		ps_lstdel(&stack_a);
 	// sleep(30);
 	return (0);
 }
