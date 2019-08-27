@@ -23,7 +23,7 @@ typedef struct		s_args
     struct s_args	*prev;
 }					t_args;
 
-
+void                bigger_sort(t_args **stack_a, t_args **stack_b, int chunk_size, int *sorted_arr);
 void	            ps_lstdel(t_args **alst);
 void 				add_to_beginning(t_args **head, int num_args, int arg);
 int					is_dup(int *dup_check, int num, int numDup);
@@ -50,7 +50,7 @@ int					get_highest_arg(t_args *stack_ab);
 void				stack_a_sort(t_args **stack_a, t_args **stack_b);
 void				stack_b_sort(t_args **stack_a, t_args **stack_b);
 void				separate_stacks(t_args **stack_a, t_args **stack_b, int pivot);
-t_args				*recursive_push_swap(t_args *stack_a, t_args *stack_b, int *arr);
+t_args				*recursive_push_swap(t_args *stack_a, t_args *stack_b, int *sorted_arr);
 void				recursive_function(t_args **stack_a, t_args **stack_b, int *sorted_arr);
 void				split(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr);
 void				back_to_before(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr);

@@ -29,39 +29,30 @@ int		loc_char(char *str, char c){
 void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 {
 	if (!ft_strcmp(buf, "sa"))
-		ft_num_swap_individual(stack_a);
+		call_exec(stack_a, stack_b, "sa");
 	else if (!ft_strcmp(buf, "sb"))
-		ft_num_swap_individual(stack_b);
+		call_exec(stack_a, stack_b, "sb");
 	else if (!ft_strcmp(buf, "ss"))
-	{
-		ft_num_swap_individual(stack_a);
-		ft_num_swap_individual(stack_b);
-	}
+		call_exec(stack_a, stack_b, "ss");
 	else if (!ft_strcmp(buf, "pb"))
-		push_to(stack_a, stack_b);
+		call_exec(stack_a, stack_b, "pb");
 	else if (!ft_strcmp(buf, "pa"))
-		push_to(stack_b, stack_a);
+		call_exec(stack_a, stack_b, "pa");
 	else if (!ft_strcmp(buf, "ra"))
-		rot_up(stack_a);
+		call_exec(stack_a, stack_b, "ra");
 	else if (!ft_strcmp(buf, "rb"))
-		rot_up(stack_b);
+		call_exec(stack_a, stack_b, "rb");
 	else if (!ft_strcmp(buf, "rr"))
-	{
-		rot_up(stack_a);
-		rot_up(stack_b);
-	}
+		call_exec(stack_a, stack_b, "rr");
 	else if (!ft_strcmp(buf, "rra"))
-		rot_down(stack_a);
+		call_exec(stack_a, stack_b, "rra");
 	else if (!ft_strcmp(buf, "rrb"))
-		rot_down(stack_b);
+		call_exec(stack_a, stack_b, "rra");
 	else if (!ft_strcmp(buf, "rrr"))
-	{
-		rot_down(stack_a);
-		rot_down(stack_b);
-	}
+		call_exec(stack_a, stack_b, "rrr");
 	else
 		ft_putstr_fd("Error\n", 2);
-	// print_list(*stack_a, *stack_b);
+	print_list(*stack_a, *stack_b);
 }
 
 void    get_input(t_args **stack_a, t_args **stack_b)
@@ -100,6 +91,7 @@ int main(int argc, char *argv[])
 	{
 		str = ft_strsplit(argv[1], ' ');
 		init_stack_a(&stack_a, count_num_2d_args(str), str, 0);
+		free_two_d(str);
 	}
 	else
 		init_stack_a(&stack_a, argc - 1, argv, 1);
@@ -109,5 +101,6 @@ int main(int argc, char *argv[])
 	if (stack_b)
 		ps_lstdel(&stack_b);
 	// printf("arg: %d\n", stack_a->arg);
+	sleep(30);
 	return (0);
 }

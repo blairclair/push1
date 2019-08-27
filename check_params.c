@@ -39,14 +39,12 @@ int	check_num(char **str, int *dup_check, int i)
 		if (!ft_isnumber(str[i]) || num > 2147483647 ||
 		num < -2147483648 || !is_dup(dup_check, num, numDup))
 		{
-			free(str);
 			return (0);
 		}
 		dup_check[i] = num;
 		numDup++;
 		i++;
 	}
-	free(str);
 	return (1);
 }
 
@@ -56,7 +54,7 @@ int	is_safe(int argc, char *argv[])
 	char		**str;
 	int			ret;
 	int			j;
-
+	int			isString;
 	j = 1;
 	ret = 1;
 	if (argc < 2)
@@ -66,6 +64,7 @@ int	is_safe(int argc, char *argv[])
 		str = ft_strsplit(argv[1], ' ');
 		argc = count_num_2d_args(str) + 1;
 		ret = 3;
+		isString = 1;
 	}
 	else
 	{
@@ -75,10 +74,15 @@ int	is_safe(int argc, char *argv[])
 			str[j - 1] = argv[j];
 			j++;
 		}
+		isString = 0;
 	}
 	dup_check = ft_memalloc(argc * sizeof(int*) + 1);
 	if (!check_num(str, dup_check, 0))
 		ret = -1;
+	if (isString)
+		free_two_d(str);
+	else
+		free(str);	
 	free(dup_check);
 	return (ret);
 }

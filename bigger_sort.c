@@ -269,27 +269,69 @@ void	split(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr)
 t_args	*recursive_push_swap(t_args *stack_a, t_args *stack_b, int *sorted_arr)
 {
 	int pivot_a;
-	int	pos;
-	int	highest_a;
+	// int	pos;
+	// int	highest_a;
 	int	len;
 
 	if (check_if_done(stack_a))
 		return (stack_a);
 	len = stack_a->num_args;
-	pivot_a = get_average(stack_a);
-	while (len-- > 0)
+	get_average(stack_b);
+	pivot_a = sorted_arr[len / 2];
+	printf("%d\n", pivot_a);
+	return stack_a;
+	// while (len-- > 0)
+	// {
+	// 	stack_a->arg < pivot_a ? call_exec(&stack_a, &stack_b, "pb") :
+	// 	call_exec(&stack_a, &stack_b, "ra");
+	// }
+	// recursive_function(&stack_a, &stack_b, sorted_arr);
+	// highest_a = get_highest_arg(stack_a);
+	// pos = get_pos_no_one(stack_a, highest_a, sorted_arr[0]);
+	// if (pos >= 20)
+	// {
+	// 	split(&stack_a, &stack_b, get_highest_arg(stack_a), sorted_arr);
+	// 	split(&stack_a, &stack_b, get_highest_arg(stack_a), sorted_arr);
+	// }
+	// back_to_before(&stack_a, &stack_b, highest_a, sorted_arr);
+	// return (stack_a);
+}
+
+void	get_chunks(int **chunks, int chunk_size, int *sorted_arr)
+{
+	int	i;
+	int	j;
+	int	chunkLoc;
+
+	i = 0;
+	j = 0;
+	chunkLoc = 0;
+	while (sorted_arr[i])
 	{
-		stack_a->arg < pivot_a ? call_exec(&stack_a, &stack_b, "pb") :
-		call_exec(&stack_a, &stack_b, "ra");
+		if (i % chunk_size == 0)
+		{
+			chunkLoc = 0;
+			j++;
+			chunks[j] = ft_memalloc(sizeof(int) * chunk_size);
+		}
+		else
+			chunks[j][chunkLoc] = sorted_arr[i];
+		chunkLoc++;
 	}
-	recursive_function(&stack_a, &stack_b, sorted_arr);
-	highest_a = get_highest_arg(stack_a);
-	pos = get_pos_no_one(stack_a, highest_a, sorted_arr[0]);
-	if (pos >= 20)
-	{
-		split(&stack_a, &stack_b, get_highest_arg(stack_a), sorted_arr);
-		split(&stack_a, &stack_b, get_highest_arg(stack_a), sorted_arr);
+}
+
+void	bigger_sort(t_args **stack_a, t_args **stack_b, int chunk_size, int *sorted_arr)
+{
+	int	**chunks;
+	int	num_chunks;
+
+	num_chunks = (*stack_a)->num_args / chunk_size;
+	chunks = ft_memalloc(sizeof(int*) * num_chunks);
+	get_chunks(chunks, chunk_size, sorted_arr);
+	for (int i = 0; i < num_chunks; i++){
+		for (int j = 0; j < chunk_size; j++){
+			printf("chunk: %d: %d\n",i, chunks[i][j]);
+		}
 	}
-	back_to_before(&stack_a, &stack_b, highest_a, sorted_arr);
-	return (stack_a);
+	stack_b = malloc(5);
 }

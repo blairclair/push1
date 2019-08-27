@@ -325,73 +325,26 @@ int		get_something(t_args *stack_a, int lowest)
 	return (1);
 }
 
-int		push_swap_simple(t_args **stack_a, t_args **stack_b)
+void	smart_rot(t_args **stack_a, t_args **stack_b, int middle)
 {
-	int	pos;
-	int	lowest;
-	int	highest;
-	int	check;
-	int	last;
+	if ((*stack_a)->arg < middle)
+		call_exec(stack_a, stack_b, "rra");
+	else
+		call_exec(stack_a, stack_b, "ra");
+}
 
-	check = -1;
-	while (1)
-	{
-		lowest = get_lowest_arg(*stack_a);
-		highest = get_highest_arg(*stack_a);
-		pos = get_unsorted_pos(*stack_a, 1);
-		last = get_last_arg(*stack_a);
-		if (check_if_done(*stack_a) && (*stack_b) == NULL)
+int		push_swap_simple(t_args **stack_a, t_args **stack_b, int middle)
+{
+	while (1){
+		if (check_if_done(*stack_a) && *stack_b == NULL)
 			return (1);
-		if (check_if_done((*stack_a)) && (*stack_b))
-		{
-			if (should_merge(stack_a, stack_b))
-				return (1);
-		}
-
-		if (check == -1)
-			check = get_something(*stack_a, lowest);
-		if ((*stack_a)->arg == lowest)
-		{
+		if (should_merge(stack_a, stack_b))
+			return (1);
+		if ((*stack_a)->arg == get_lowest_arg(*stack_a)){
 			call_exec(stack_a, stack_b, "pb");
-			check = -1;
-			if (should_merge(stack_a, stack_b))
-				return (1);
 		}
-		if ((*stack_a)->arg > (*stack_a)->next->arg)
-		{
-			if (is_backwards(*stack_a, highest) && (*stack_b))
-				call_exec(stack_a, stack_b, "sa");
-			else if (get_something(*stack_a, lowest) == 1 && check != 3)
-			{
-				call_exec(stack_a, stack_b, "ra");
-				check = 1;
-			}
-			else if (lowest == last && check != 1)
-			{
-				call_exec(stack_a, stack_b, "rra");
-				check = 3;
-			}
-			else
-				call_exec(stack_a, stack_b, "sa");
-			if (should_merge(stack_a, stack_b))
-				return (1);
-		}
-		else if (check != -1)
-		{
-			if ((*stack_a)->arg != lowest && (*stack_a)->next &&
-			 (*stack_a)->next->arg == highest && last != lowest)
-			{
-				call_exec(stack_a, stack_b, "ra");
-				call_exec(stack_a, stack_b, "ra");
-				check = 1;
-			}
-			else if (check == 1)
-				call_exec(stack_a, stack_b, "ra");
-			else if (check == 3)
-				call_exec(stack_a, stack_b, "rra");
-			if (should_merge(stack_a, stack_b))
-				return (1);
-		}
+		else
+			smart_rot(stack_a, stack_b, middle);
 	}
 }
 
@@ -497,16 +450,20 @@ void	push_swap_extra_simple(t_args **stack_a, t_args **stack_b){
 void	push_swap(t_args *stack_a, t_args *stack_b)
 {
 	int	*sorted_arr;
+	int	middle;
 
 	if (check_if_done(stack_a) && stack_b == NULL)
 		return ;
 	sorted_arr = actual_sort(stack_a);
+	middle = sorted_arr[stack_a->num_args / 2];
 	if (stack_a->num_args <= 3)
 		push_swap_extra_simple(&stack_a, &stack_b);
 	else if (stack_a->num_args <= 5)
-		push_swap_simple(&stack_a, &stack_b);
+		push_swap_simple(&stack_a, &stack_b, middle);
 	else
-		stack_a = recursive_push_swap(stack_a, stack_b, sorted_arr);
+		bigger_sort(&stack_a, &stack_b, 10, sorted_arr);
+	free(sorted_arr);
+	ps_lstdel(&stack_a);
 }
 
 int		main(int argc, char *argv[])
@@ -515,7 +472,9 @@ int		main(int argc, char *argv[])
 	t_args  *stack_b;
 	int     check;
 	char	**str;
+	int		i;
 
+	i = 0;
 	stack_b = NULL;
 	stack_a = NULL;
 	if ((check = is_safe(argc, argv)) <= 0)
@@ -527,13 +486,14 @@ int		main(int argc, char *argv[])
 	else if (check == 3)
 	{
 		str = ft_strsplit(argv[1], ' ');
-    	init_stack_a(&stack_a, count_num_2d_args(str), str, 0);
+    	init_stack_a(&stack_a, count_num_2d_args(str), str, 0);	
+		free_two_d(str);
 	}
 	else
 		init_stack_a(&stack_a, argc - 1, argv, 1);
 	push_swap(stack_a, stack_b);
-	if (stack_a)
-		ps_lstdel(&stack_a);
+	// if (stack_a)
+	// 	ps_lstdel(&stack_a);
 	// sleep(30);
 	return (0);
 }
