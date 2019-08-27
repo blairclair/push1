@@ -325,26 +325,36 @@ int		get_something(t_args *stack_a, int lowest)
 	return (1);
 }
 
-void	smart_rot(t_args **stack_a, t_args **stack_b, int middle)
+int		get_loc_arg(t_args *stack_a, int arg)
 {
-	if ((*stack_a)->arg < middle)
-		call_exec(stack_a, stack_b, "rra");
-	else
-		call_exec(stack_a, stack_b, "ra");
+	int	loc;
+
+	loc = 0;
+	while (stack_a)
+	{
+		if (stack_a->arg == arg)
+			return loc;
+		stack_a = stack_a->next;
+		loc++;
+	}
+	return loc;
 }
 
-int		push_swap_simple(t_args **stack_a, t_args **stack_b, int middle)
+int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 {
+	int	lowest;
+
 	while (1){
+		lowest = get_lowest_arg(*stack_a);
 		if (check_if_done(*stack_a) && *stack_b == NULL)
 			return (1);
 		if (should_merge(stack_a, stack_b))
 			return (1);
-		if ((*stack_a)->arg == get_lowest_arg(*stack_a)){
+		if ((*stack_a)->arg == lowest){
 			call_exec(stack_a, stack_b, "pb");
 		}
 		else
-			smart_rot(stack_a, stack_b, middle);
+			rot_to_top(stack_a, stack_b, get_loc_arg(*stack_a, lowest));
 	}
 }
 
@@ -459,7 +469,7 @@ void	push_swap(t_args *stack_a, t_args *stack_b)
 	if (stack_a->num_args <= 3)
 		push_swap_extra_simple(&stack_a, &stack_b);
 	else if (stack_a->num_args <= 5)
-		push_swap_simple(&stack_a, &stack_b, middle);
+		push_swap_simple(&stack_a, &stack_b);
 	else
 		bigger_sort(&stack_a, &stack_b, 10, sorted_arr);
 	free(sorted_arr);

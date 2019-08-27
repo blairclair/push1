@@ -269,8 +269,8 @@ void	split(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr)
 t_args	*recursive_push_swap(t_args *stack_a, t_args *stack_b, int *sorted_arr)
 {
 	int pivot_a;
-	// int	pos;
-	// int	highest_a;
+	int	pos;
+	int	highest_a;
 	int	len;
 
 	if (check_if_done(stack_a))
@@ -280,24 +280,24 @@ t_args	*recursive_push_swap(t_args *stack_a, t_args *stack_b, int *sorted_arr)
 	pivot_a = sorted_arr[len / 2];
 	printf("%d\n", pivot_a);
 	return stack_a;
-	// while (len-- > 0)
-	// {
-	// 	stack_a->arg < pivot_a ? call_exec(&stack_a, &stack_b, "pb") :
-	// 	call_exec(&stack_a, &stack_b, "ra");
-	// }
-	// recursive_function(&stack_a, &stack_b, sorted_arr);
-	// highest_a = get_highest_arg(stack_a);
-	// pos = get_pos_no_one(stack_a, highest_a, sorted_arr[0]);
-	// if (pos >= 20)
-	// {
-	// 	split(&stack_a, &stack_b, get_highest_arg(stack_a), sorted_arr);
-	// 	split(&stack_a, &stack_b, get_highest_arg(stack_a), sorted_arr);
-	// }
-	// back_to_before(&stack_a, &stack_b, highest_a, sorted_arr);
-	// return (stack_a);
+	while (len-- > 0)
+	{
+		stack_a->arg < pivot_a ? call_exec(&stack_a, &stack_b, "pb") :
+		call_exec(&stack_a, &stack_b, "ra");
+	}
+	recursive_function(&stack_a, &stack_b, sorted_arr);
+	highest_a = get_highest_arg(stack_a);
+	pos = get_pos_no_one(stack_a, highest_a, sorted_arr[0]);
+	if (pos >= 20)
+	{
+		split(&stack_a, &stack_b, get_highest_arg(stack_a), sorted_arr);
+		split(&stack_a, &stack_b, get_highest_arg(stack_a), sorted_arr);
+	}
+	back_to_before(&stack_a, &stack_b, highest_a, sorted_arr);
+	return (stack_a);
 }
 
-void	get_chunks(int **chunks, int chunk_size, int *sorted_arr)
+int		**get_chunks(int **chunks, int chunk_size, int *sorted_arr, int num_args)
 {
 	int	i;
 	int	j;
@@ -306,17 +306,77 @@ void	get_chunks(int **chunks, int chunk_size, int *sorted_arr)
 	i = 0;
 	j = 0;
 	chunkLoc = 0;
-	while (sorted_arr[i])
+	while (i < num_args)
 	{
-		if (i % chunk_size == 0)
+		if (i % chunk_size == 0 && i != 0)
 		{
-			chunkLoc = 0;
+			chunkLoc = -1;
 			j++;
 			chunks[j] = ft_memalloc(sizeof(int) * chunk_size);
 		}
 		else
 			chunks[j][chunkLoc] = sorted_arr[i];
 		chunkLoc++;
+		i++;
+	}
+	chunks[j + 1] = NULL;
+	return (chunks);
+}
+
+int		find_next_chunk_val_botton(t_args *stack_a, int *chunk, int chunk_size)
+{
+	int	loc;
+
+	loc = 1;
+	while (stack_a->next)
+		stack_a = stack_a->next;
+	while (stack_a)
+	{
+		if (stack_a->arg >= chunk[0] && stack_a->arg <= chunk[chunk_size - 1])
+			return loc;
+		stack_a = stack_a->prev;
+		loc++;
+	}
+	return (loc);
+}
+
+int		find_next_chunk_val_top(t_args *stack_a, int *chunk, int chunk_size)
+{
+	int	loc;
+
+	loc = 1;
+	while (stack_a)
+	{
+		if (stack_a->arg >= chunk[0] && stack_a->arg <= chunk[chunk_size - 1])
+			return loc;
+		stack_a = stack_a->next;
+		loc++;
+	}
+	return (loc);
+}
+
+void	rot_to_top(t_args **stack_a, t_args **stack_b, int loc)
+{
+	int	half_size;
+	int	i;
+
+	i = 0;
+	half_size = (*stack_a)->arg / 2;
+	if (loc <= half_size)
+	{
+		while (i < loc)
+		{
+			call_exec(stack_a, stack_b, "ra");
+			i++;
+		}
+	}
+	else
+	{
+		while (i < (*stack_a)->num_args - loc)
+		{
+			call_exec(stack_a, stack_b, "rra");
+			i++;
+		}
 	}
 }
 
@@ -324,14 +384,22 @@ void	bigger_sort(t_args **stack_a, t_args **stack_b, int chunk_size, int *sorted
 {
 	int	**chunks;
 	int	num_chunks;
+	int	first_check;
+	int	second_check;
+	int	i;
 
+	i = 0;
 	num_chunks = (*stack_a)->num_args / chunk_size;
 	chunks = ft_memalloc(sizeof(int*) * num_chunks);
-	get_chunks(chunks, chunk_size, sorted_arr);
-	for (int i = 0; i < num_chunks; i++){
-		for (int j = 0; j < chunk_size; j++){
-			printf("chunk: %d: %d\n",i, chunks[i][j]);
-		}
+	chunks[0] = ft_memalloc(sizeof(int) * chunk_size);
+	chunks = get_chunks(chunks, chunk_size, sorted_arr, (*stack_a)->num_args);
+	while (1)
+	{
+		if (check_if_done(*stack_a) && !stack_b)
+			break ;
+		first_check = find_next_chunk_val_top(*stack_a, chunks[i], chunk_size);
+		second_check = find_next_chunk_val_botton(*stack_a, chunks[i], chunk_size);
+		rot_to_top(stack_a, stack_b, (first_check < second_check) ? first_check : second_check);
+		i++;
 	}
-	stack_b = malloc(5);
 }

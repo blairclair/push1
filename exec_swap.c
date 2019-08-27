@@ -27,8 +27,11 @@ void delete_node(t_args **head, int n)
         return; 
     } 
 	while (i < n && tmp != NULL)
+	{
 		tmp = tmp->next;
-    if (tmp == NULL || tmp->next == NULL) 
+		i++;
+	}
+	if (tmp == NULL || tmp->next == NULL) 
          return; 
    	nextTmp = tmp->next->next; 
     free(tmp->next);
@@ -75,7 +78,7 @@ void	rot_down(t_args **stack_ab)
 	last_arg = (*stack_ab)->arg;
 	(*stack_ab) = head;
 	add_to_beginning(stack_ab, (*stack_ab)->num_args, last_arg);
-	delete_node(stack_ab, (*stack_ab)->num_args);
+	delete_node(stack_ab, (*stack_ab)->num_args - 1);
 }
 
 void	ft_num_swap_individual(t_args **stack_ab)

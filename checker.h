@@ -23,6 +23,8 @@ typedef struct		s_args
     struct s_args	*prev;
 }					t_args;
 
+
+void	            rot_to_top(t_args **stack_a, t_args **stack_b, int loc);
 void                bigger_sort(t_args **stack_a, t_args **stack_b, int chunk_size, int *sorted_arr);
 void	            ps_lstdel(t_args **alst);
 void 				add_to_beginning(t_args **head, int num_args, int arg);
