@@ -10,11 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-<<<<<<< HEAD
-#include "push_swap.h"
-=======
 #include "checker.h"
->>>>>>> 0a90c5df335cc62ac0af7fe33063a9874c69efb9
 
 void	recursive_function(t_args **stack_a, t_args **stack_b, int *sorted_arr)
 {
@@ -38,12 +34,9 @@ void	recursive_function(t_args **stack_a, t_args **stack_b, int *sorted_arr)
 	back_to_before(stack_a, stack_b, highest, sorted_arr);
 }
 
-<<<<<<< HEAD
-=======
 
 
 
->>>>>>> 0a90c5df335cc62ac0af7fe33063a9874c69efb9
 void	back_to_before(t_args **stack_a, t_args **stack_b,
 int highest, int *sorted_arr)
 {
@@ -63,11 +56,8 @@ int highest, int *sorted_arr)
 		recursive_function(stack_a, stack_b, sorted_arr);
 }
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> 0a90c5df335cc62ac0af7fe33063a9874c69efb9
 t_args	*recursive_push_swap(t_args *stack_a, t_args *stack_b, int *sorted_arr)
 {
 	int pivot_a;
@@ -95,7 +85,3 @@ t_args	*recursive_push_swap(t_args *stack_a, t_args *stack_b, int *sorted_arr)
 	back_to_before(&stack_a, &stack_b, highest_a, sorted_arr);
 	return (stack_a);
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 0a90c5df335cc62ac0af7fe33063a9874c69efb9

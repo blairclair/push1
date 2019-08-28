@@ -12,6 +12,17 @@
 
 #include "checker.h"
 
+void	split_to_b(t_args **stack_a, t_args **stack_b, int pos, int *check)
+{
+	if ((*stack_a)->arg >= pos)
+	{
+		call_exec(stack_a, stack_b, "ra");
+		(*check)++;
+	}
+	else
+		call_exec(stack_a, stack_b, "pb");
+}
+
 void	split(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr)
 {
 	int	pos;

@@ -12,7 +12,14 @@
 
 #include "push_swap.h"
 
-
+void	update_num_args(t_args *stack_ab, int new_num_args)
+{
+	while (stack_ab)
+	{
+		(stack_ab)->num_args = new_num_args;
+		(stack_ab) = (stack_ab)->next;
+	}
+}
 
 void	rot_up(t_args **stack_ab)
 {

@@ -48,33 +48,6 @@ int		get_value_after_last(t_args *stack_ab, int *sorted_arr, int num_args)
 	return (sorted_arr[i - 1]);
 }
 
-int	get_value_from_pos(t_args *stack_ab, int pos)
-{
-	while (stack_ab && pos > 0)
-	{
-		stack_ab = stack_ab->next;
-		pos--;
-	}
-	return (stack_ab->arg);
-}
-
-int		get_pos_arg(t_args *stack_ab, int arg)
-{
-	int	pos;
-
-	pos = 0;
-	while (stack_ab->next)
-		stack_ab = stack_ab->next;
-	while (pos < stack_ab->num_args)
-	{
-		if (stack_ab->arg == arg)
-			return (pos);
-		pos++;
-		stack_ab = stack_ab->prev;
-	}
-	return (pos);
-}
-
 int		get_average(t_args *stack_ab)
 {
 	float	num;
