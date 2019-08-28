@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrodzin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/16 11:43:49 by agrodzin          #+#    #+#             */
-/*   Updated: 2018/05/07 13:45:49 by agrodzin         ###   ########.fr       */
+/*   Created: 2019/08/28 10:50:53 by agrodzin          #+#    #+#             */
+/*   Updated: 2019/08/28 10:50:57 by agrodzin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "checker.h"
 
-# define BUFF_SIZE 50
-
-# include "libft.h"
-# include <stdlib.h>
-# include <unistd.h>
-
-#define CHECKX(x) if (!x) return (0);
-
-struct      s_line
+int		get_pos_no_one(t_args *stack_a, int arg, int lowest)
 {
-    int             fd;
-    char            *buf;
-    struct s_line    *next;
-};
+	int	i;
 
-int		get_next_line(const int fd, char **line);
-
-#endif
+	i = 0;
+	while (stack_a && stack_a->arg <= arg && stack_a->arg != lowest)
+	{
+		i++;
+		stack_a = stack_a->next;
+	}
+	return (i);
+}

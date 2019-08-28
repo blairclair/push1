@@ -12,109 +12,83 @@
 
 #include "get_next_line.h"
 
-/*
-** @Function: appends the data read into buffer to f->storage
-** @Param 1: The gnl structure.
-** @Return: the length of the data read in.
-*/
-
-static int		lineset(t_gnl *f)
+static int		set_the_line(struct s_line *file_stuff)
 {
-	char	*buffer;
+	char	*buf;
 	int		ret;
-    char    *tmp;
+    char    *temp;
 
-    buffer = ft_strnew(BUFF_SIZE + 1);
-	if ((ret = read(f->fd, buffer, BUFF_SIZE)) > 0)
+    buf = ft_memalloc(BUFF_SIZE + 1);
+	if ((ret = read(file_stuff->fd, buf, BUFF_SIZE)) > 0)
 	{
-		buffer[ret] = '\0';
-        tmp = f->storage;
-		f->storage = ft_strjoin(f->storage, buffer);
-        ft_strdel(&tmp);
+		buf[ret] = '\0';
+        temp = file_stuff->buf;
+		file_stuff->buf = ft_strjoin(file_stuff->buf, buf);
+        free(temp);
 	}
-    ft_strdel(&buffer);
+    free(buf);
 	return (ret);
 }
 
-/*
-** @Function: Determines the list element associated with
-** @Param 1: the t_gnl pointer, whose member f->storage will be changed.
-** @Param 2: The string pointer to be set to the buffer storing the newline.
-** @Return: Same values as get_next_line
-*/
-
-static t_gnl	*determine_file(const int fd, t_gnl **master_list)
+static struct s_line	*get_the_file(const int fd, struct s_line **head)
 {
-	t_gnl *ptr;
+	struct s_line *mem_stuff;
 
-	ptr = *master_list;
-	while (ptr && ptr->fd != fd)
-		ptr = ptr->next;
-	if (!ptr)
+	mem_stuff = *head;
+	while (mem_stuff)
 	{
-		ptr = (t_gnl *)ft_memalloc(sizeof(t_gnl));
-		ptr->fd = fd;
-        if (!(ptr->storage = ft_strnew(0)))
-            return (NULL);
-		ptr->next = *master_list;
-		*master_list = ptr;
+		if (mem_stuff->fd == fd)
+			break;
+		mem_stuff = mem_stuff->next;
 	}
-	return (ptr);
+	if (!mem_stuff)
+	{
+		mem_stuff = ft_memalloc(sizeof(struct s_line));
+		mem_stuff->fd = fd;
+		mem_stuff->buf = ft_memalloc(0);
+		mem_stuff->next = *head;
+		*head = mem_stuff;
+	}
+	return (mem_stuff);
 }
 
-/*
-** @Function: Sets the storage to the remaining part of the storage and
-** sets the line to the next_line.
-** @Param 1: the t_gnl pointer, whose member f->storage will be changed.
-** @Param 2: The string pointer to be set to the buffer storing the newline.
-** @Return: Same values as get_next_line
-*/
-
-static int          set_storage_and_line(t_gnl *f, char **line)
+static int          get_the_line(struct s_line *file_stuff, char **line)
 {
     int i;
     char *tmp;
+	char	*tmp2;
 
-    i = 0;
-    tmp = NULL;
-	while (!(ft_strchr(f->storage, '\n')))
+    i = -1;
+	while (!(ft_strchr(file_stuff->buf, '\n')))
 	{
-        i = lineset(f);
+        i  = set_the_line(file_stuff) + 1;
 		if (i < 0)
 			return (-1);
-		if (!i && (!(ft_strchr(f->storage, '\n'))))
+		if (i == 0 && ((ft_strchr(file_stuff->buf, '\n') == 0)))
 		{
-			LINCHK(f->storage[0]);
-            *line = f->storage;
+			CHECKX(file_stuff->buf[0]);
+            *line = file_stuff->buf;
 			return (1);
 		}
 	}
-	*line = ft_strsub(f->storage, 0, (ft_strchr(f->storage, '\n') - f->storage));
-    tmp = f->storage;
-	f->storage = ft_strdup(ft_strchr(f->storage, '\n') + 1);
-	ft_strdel(&tmp);
+	*line = ft_strsub(file_stuff->buf, 0,
+	(ft_strchr(file_stuff->buf, '\n') - file_stuff->buf));
+    tmp = file_stuff->buf;
+	tmp2 = ft_strchr(file_stuff->buf, '\n');
+	file_stuff->buf = tmp2 + 1;
+	free(tmp);
+	tmp = NULL;
     return (1);
 }
 
-/*
-** @Function: Gets the next line from the file descriptor fd and stores it in
-** a buffer pointed to by line. Handles multiple file descriptors and stores
-** them as a Linked List. The head of the list is a static variable master_list
-** that maintains the list between function calls.
-** @Param 1: The file descriptor to read, obtained by opening a path with open
-** @Param 2: The pointer to the buffer that gnl uses to store the next line.
-** @Return: Returns 1 if line has been read, 0 if the reading is completed and
-** -1 if an error occurs.
-*/
-
 int				get_next_line(const int fd, char **line)
 {
-	static t_gnl	*master_list;
-	t_gnl			*f;
+	static struct s_line	*head;
+	struct s_line			*file_stuff;
 
 	if (fd < 0 || !line)
 		return (-1);
-	f = determine_file(fd, &master_list);
-    LINCHK(f->storage);
-    return (set_storage_and_line(f, line));
+	file_stuff = get_the_file(fd, &head);
+    CHECKX(file_stuff->buf);
+    return (get_the_line(file_stuff, line));
 }

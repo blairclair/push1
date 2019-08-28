@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrodzin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/16 11:43:49 by agrodzin          #+#    #+#             */
-/*   Updated: 2018/05/07 13:45:49 by agrodzin         ###   ########.fr       */
+/*   Created: 2019/08/28 10:35:06 by agrodzin          #+#    #+#             */
+/*   Updated: 2019/08/28 10:35:08 by agrodzin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "checker.h"
 
-# define BUFF_SIZE 50
-
-# include "libft.h"
-# include <stdlib.h>
-# include <unistd.h>
-
-#define CHECKX(x) if (!x) return (0);
-
-struct      s_line
+void    init_stack_a(t_args **stack_a, int num_args, char *argv[], int i)
 {
-    int             fd;
-    char            *buf;
-    struct s_line    *next;
-};
+	int	j;
 
-int		get_next_line(const int fd, char **line);
-
-#endif
+	if (i == 0)
+		j = num_args;
+	else
+		j = num_args + 1;
+    while (i < j)
+    {
+        add_to_end(stack_a, num_args, ft_atoi(argv[i]));
+        i++;
+    }
+}

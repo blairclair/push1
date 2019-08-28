@@ -16,27 +16,32 @@ CC=gcc
 CFLAGS= -Wall -Wextra -Werror -g 
 SRCS=checker.c
 SRCS2=push_swap.c\
+b_to_a.c\
+split.c\
 bigger_sort.c
 SRCS_COMBINE=utils.c\
+utils2.c\
+utils3.c\
+init.c\
 check_params.c\
 call_exec.c\
 exec_swap.c
-SRCS_TEST=push_swap.c\
-rng_poss.c
+SRCS_TEST=push_swap.c
 NAME=checker
 NAME2=push_swap
 NAME3=test
 OBJ=$(SRCS:%.c=%.o)
+OBJ2=$(SRCS2:%.c=%.o)
+OBJCOMBINE=$(SRCS_COMBINE:%.c=%.o)
+all: $(OBJ)
 
-all: $(NAME)
-
-$(NAME): $(OBJ)
+$(OBJ) : $(SRCS)
 	make -C libft/
 	make -C libft/printf_functions/
-	$(CC) -c $(SRCS)
-	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) $(SRCS_COMBINE) $(LIBFT) $(PRINT)
-	$(CC) $(CFLAGS) -o $(NAME2) $(SRCS2) $(LIBFT) $(SRCS_COMBINE) $(PRINT)
-#	$(CC) $(CFLAGS) -o $(NAME3) $(SRCS_TEST) $(LIBFT) $(PRINT)
+	$(CC) $(CFLAGS) -c $(SRCS_COMBINE) $(SRCS) $(SRCS2)
+	$(CC) $(OBJCOMBINE) $(OBJ) $(LIBFT) $(PRINT) -o $(NAME)
+	$(CC) $(OBJCOMBINE) $(OBJ2) $(LIBFT) $(PRINT) -o $(NAME2)
+
 clean:
 	/bin/rm -f *.o
 	make -C libft/ clean

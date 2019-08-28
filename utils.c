@@ -5,27 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrodzin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/19 16:09:13 by agrodzin          #+#    #+#             */
-/*   Updated: 2018/12/19 16:09:15 by agrodzin         ###   ########.fr       */
+/*   Created: 2019/08/28 12:50:32 by agrodzin          #+#    #+#             */
+/*   Updated: 2019/08/28 12:50:36 by agrodzin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-void    init_stack_a(t_args **stack_a, int num_args, char *argv[], int i)
-{
-	int	j;
-
-	if (i == 0)
-		j = num_args;
-	else
-		j = num_args + 1;
-    while (i < j)
-    {
-        add_to_end(stack_a, num_args, ft_atoi(argv[i]));
-        i++;
-    }
-}
 
 void	add_to_end(t_args **stack_ab, int num_args, int arg)
 {

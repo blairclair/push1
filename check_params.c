@@ -69,11 +69,8 @@ int	is_safe(int argc, char *argv[])
 	else
 	{
 		str = ft_memalloc(argc * sizeof(char*));
-		while (argv[j])
-		{
+		while (argv[j++])
 			str[j - 1] = argv[j];
-			j++;
-		}
 		isString = 0;
 	}
 	dup_check = ft_memalloc(argc * sizeof(int*) + 1);

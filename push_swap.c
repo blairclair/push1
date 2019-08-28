@@ -72,35 +72,6 @@ int	get_unsorted_pos(t_args *stack_ab, int stack)//not zero based
 	return (i);
 }
 
-int		pos_as_last_value(t_args *stack_a, int pos)
-{
-	int	arg;
-
-	while (stack_a && pos > 0)
-	{
-		stack_a = stack_a->next;
-		pos--;
-	}
-	if (stack_a)
-		arg = stack_a->arg;
-	else
-		return (0);
-	while (stack_a->next)
-		stack_a = stack_a->next;
-	if (arg > stack_a->arg)
-		return (1);
-	return (0);
-}
-
-void	make_pos_last_value(t_args **stack_a, t_args **stack_b, int pos)
-{
-	while (pos > 1)
-	{
-		call_exec(stack_a, stack_b, "pb");
-		pos--;
-	}
-	call_exec(stack_a, stack_b, "ra");
-}
 
 int		is_perfect_merge(t_args *stack_a, t_args *stack_b)
 {
@@ -298,31 +269,6 @@ int		should_merge(t_args **stack_a, t_args **stack_b)
 		return (1);
 	}
 	return (0);
-}
-
-int		get_something(t_args *stack_a, int lowest)
-{
-	int	tmp;
-	int	i;
-	int	num;
-	int	divi;
-
-	i = 0;
-	tmp = stack_a->arg;
-		// printf("tmp: %d\n", tmp);
-	num = stack_a->num_args;
-	divi = num % 2;
-	while (stack_a)
-	{
-		if (stack_a->arg == lowest)
-			break ;
-			i++;
-		stack_a = stack_a->next;
-	}
-	// printf("i: %d\n", i);
-	if ((i > num / 2))// || (i == num / 2 && divi == 0))
-		return (3);
-	return (1);
 }
 
 int		get_loc_arg(t_args *stack_a, int arg)
