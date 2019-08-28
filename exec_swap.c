@@ -12,31 +12,7 @@
 
 #include "push_swap.h"
 
-void delete_node(t_args **head, int n) 
-{
-	t_args* tmp = *head; 
-   	int		i;
-	t_args	*nextTmp;
-	i = 0;
-	if (*head == NULL) 
-	   return; 
-    if (n == 0) 
-    { 
-        *head = tmp->next; 
-        free(tmp);  
-        return; 
-    } 
-	while (i < n && tmp != NULL)
-	{
-		tmp = tmp->next;
-		i++;
-	}
-	if (tmp == NULL || tmp->next == NULL) 
-         return; 
-   	nextTmp = tmp->next->next; 
-    free(tmp->next);
-    tmp->next = nextTmp;   
-} 
+
 
 void	rot_up(t_args **stack_ab)
 {
@@ -51,19 +27,6 @@ void	rot_up(t_args **stack_ab)
 	delete_node(stack_ab, 0);
 }
 
-void	add_to_beginning(t_args **head, int num_args, int arg)
-{
-	t_args *new_node;
-
-	new_node = (t_args*)ft_memalloc(sizeof(t_args));
-	new_node->arg = arg;
-	new_node->num_args = num_args;
-	new_node->next = (*head);
-	new_node->prev = NULL;
-	if ((*head) != NULL)
-		(*head)->prev = new_node;
-	(*head) = new_node;
-}
 
 void	rot_down(t_args **stack_ab)
 {
@@ -90,15 +53,6 @@ void	ft_num_swap_individual(t_args **stack_ab)
 		temp = (*stack_ab)->arg;
 		(*stack_ab)->arg = (*stack_ab)->next->arg;
 		(*stack_ab)->next->arg = temp;
-	}
-}
-
-void	update_num_args(t_args *stack_ab, int new_num_args)
-{
-	while (stack_ab)
-	{
-		(stack_ab)->num_args = new_num_args;
-		(stack_ab) = (stack_ab)->next;
 	}
 }
 

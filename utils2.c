@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrodzin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/28 10:48:14 by agrodzin          #+#    #+#             */
-/*   Updated: 2019/08/28 10:48:17 by agrodzin         ###   ########.fr       */
+/*   Created: 2019/08/28 11:08:23 by agrodzin          #+#    #+#             */
+/*   Updated: 2019/08/28 11:08:24 by agrodzin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,16 @@ int		get_average(t_args *stack_ab)
 		i++;
 	}
 	return ((int)(num / i + 0.5));
+}
+
+int	get_value_from_pos(t_args *stack_ab, int pos)
+{
+	while (stack_ab && pos > 0)
+	{
+		stack_ab = stack_ab->next;
+		pos--;
+	}
+	return (stack_ab->arg);
 }
 
 int		get_average_highest(t_args *stack_ab, int highest, int lowest)
