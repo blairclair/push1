@@ -340,6 +340,31 @@ int		get_loc_arg(t_args *stack_a, int arg)
 	return loc;
 }
 
+void	rot_to_top_simple(t_args **stack_a, t_args **stack_b, int loc)
+{
+	int	half_size;
+	int	i;
+
+	i = 0;
+	half_size = (*stack_a)->num_args / 2;
+	if (loc < half_size)
+	{
+		while (i < loc)
+		{
+			call_exec(stack_a, stack_b, "ra");
+			i++;
+		}
+	}
+	else
+	{
+		while (i < (*stack_a)->num_args - loc)
+		{
+			call_exec(stack_a, stack_b, "rra");
+			i++;
+		}
+	}
+}
+
 int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 {
 	int	lowest;
@@ -354,7 +379,7 @@ int		push_swap_simple(t_args **stack_a, t_args **stack_b)
 			call_exec(stack_a, stack_b, "pb");
 		}
 		else
-			rot_to_top(stack_a, stack_b, get_loc_arg(*stack_a, lowest));
+			rot_to_top_simple(stack_a, stack_b, get_loc_arg(*stack_a, lowest));
 	}
 }
 
@@ -471,7 +496,7 @@ void	push_swap(t_args *stack_a, t_args *stack_b)
 	else if (stack_a->num_args <= 5)
 		push_swap_simple(&stack_a, &stack_b);
 	else
-		bigger_sort(&stack_a, &stack_b, 10, sorted_arr);
+		stack_a = recursive_push_swap(stack_a, stack_b, sorted_arr);
 	free(sorted_arr);
 	ps_lstdel(&stack_a);
 }

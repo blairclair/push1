@@ -47,12 +47,11 @@ void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 	else if (!ft_strcmp(buf, "rra"))
 		call_exec(stack_a, stack_b, "rra");
 	else if (!ft_strcmp(buf, "rrb"))
-		call_exec(stack_a, stack_b, "rra");
+		call_exec(stack_a, stack_b, "rrb");
 	else if (!ft_strcmp(buf, "rrr"))
 		call_exec(stack_a, stack_b, "rrr");
 	else
 		ft_putstr_fd("Error\n", 2);
-	print_list(*stack_a, *stack_b);
 }
 
 void    get_input(t_args **stack_a, t_args **stack_b)
@@ -85,6 +84,7 @@ int main(int argc, char *argv[])
 	{
 		if (check == -1)
 			ft_putstr_fd("Error\n", 2);
+			// sleep(30);
 		return (0);
 	}
 	else if (check == 3)
