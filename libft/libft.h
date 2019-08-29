@@ -101,9 +101,9 @@ int					ft_isspacetab(char c);
 void				free_two(char **arg, int start);
 int					get_num_int_arr(int *num);
 int					is_ws(char *str, int i);
-void    			print_int_arr(int *num, int num_args);
+void				print_int_arr(int *num, int num_args);
 long long			ft_atol(const char *str);
-int   				ft_isnumber(char *str);
+int					ft_isnumber(char *str);
 int					count_num_2d_args(char **str);
 int					get_next_line(const int fd, char **line);
 #endif

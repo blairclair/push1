@@ -12,22 +12,19 @@
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-
+# define CHECKX(x) if (!x) return (0);
 # define BUFF_SIZE 50
-
 # include "libft.h"
 # include <stdlib.h>
 # include <unistd.h>
 
-#define CHECKX(x) if (!x) return (0);
-
-struct      s_line
+struct				s_line
 {
-    int             fd;
-    char            *buf;
-    struct s_line    *next;
+	int				fd;
+	char			*buf;
+	struct s_line	*next;
 };
 
-int		get_next_line(const int fd, char **line);
+int					get_next_line(const int fd, char **line);
 
 #endif

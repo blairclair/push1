@@ -14,9 +14,9 @@
 
 long long	ft_atol(const char *str)
 {
-	int		    i;
+	int			i;
 	long long	num;
-	int         check;
+	int			check;
 
 	i = 0;
 	num = 0;

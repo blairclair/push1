@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "checker.h"
 
 void	call_exec_three(t_args **stack_a, t_args **stack_b, char *choice)
 {

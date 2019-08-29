@@ -23,7 +23,8 @@ void	small_b_to_a(t_args **stack_a, t_args **stack_b, int *sorted_arr)
 		call_exec(stack_a, stack_b, "pa", 1);
 	else
 	{
-		check = VALUE_AFTER_LAST;
+		check = get_value_after_last(*stack_a, sorted_arr, ((*stack_b) ?
+		(*stack_b)->num_args : 0) + (((*stack_a)) ? (*stack_a)->num_args : 0));
 		if ((*stack_b)->arg == check || (*stack_b)->arg == sorted_arr[0])
 		{
 			call_exec(stack_a, stack_b, "pa", 1);
@@ -49,7 +50,8 @@ int pivot, int *sorted_arr)
 		call_exec(stack_a, stack_b, "pa", 1);
 	else
 	{
-		check = VALUE_AFTER_LAST;
+		check = get_value_after_last(*stack_a, sorted_arr, ((*stack_b) ?
+		(*stack_b)->num_args : 0) + (((*stack_a)) ? (*stack_a)->num_args : 0));
 		if ((*stack_b)->arg == check || (*stack_b)->arg == sorted_arr[0])
 		{
 			call_exec(stack_a, stack_b, "pa", 1);

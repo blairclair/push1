@@ -21,12 +21,14 @@ void	recursive_function(t_args **stack_a, t_args **stack_b, int *sorted_arr)
 		return ;
 	highest = get_highest_arg(*stack_b);
 	go_to_a(stack_a, stack_b, sorted_arr);
-	check = VALUE_AFTER_LAST;
+	check = get_value_after_last(*stack_a, sorted_arr, ((*stack_b) ?
+		(*stack_b)->num_args : 0) + (((*stack_a)) ? (*stack_a)->num_args : 0));
 	while (((*stack_a)->arg == check
 	|| (*stack_a)->arg == sorted_arr[0]) && !check_if_done(*stack_a))
 	{
 		call_exec(stack_a, stack_b, "ra", 1);
-		check = VALUE_AFTER_LAST;
+		check = get_value_after_last(*stack_a, sorted_arr, ((*stack_b) ?
+		(*stack_b)->num_args : 0) + (((*stack_a)) ? (*stack_a)->num_args : 0));
 	}
 	recursive_function(stack_a, stack_b, sorted_arr);
 	if (get_pos_no_one(*stack_a, highest, sorted_arr[0]) >= 20)
@@ -42,13 +44,15 @@ int highest, int *sorted_arr)
 	while (*stack_a && (*stack_a)->arg <= highest &&
 	(*stack_a)->arg != sorted_arr[0])
 	{
-		check = VALUE_AFTER_LAST;
+		check = get_value_after_last(*stack_a, sorted_arr, ((*stack_b) ?
+		(*stack_b)->num_args : 0) + (((*stack_a)) ? (*stack_a)->num_args : 0));
 		if ((*stack_a)->arg == check)
 			call_exec(stack_a, stack_b, "ra", 1);
 		else
 			call_exec(stack_a, stack_b, "pb", 1);
 	}
-	check = VALUE_AFTER_LAST;
+	check = get_value_after_last(*stack_a, sorted_arr, ((*stack_b) ?
+		(*stack_b)->num_args : 0) + (((*stack_a)) ? (*stack_a)->num_args : 0));
 	if (get_lowest_arg(*stack_b) == check)
 		recursive_function(stack_a, stack_b, sorted_arr);
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "checker.h"
 
 void	push_swap_extra_simple_2(t_args **stack_a, t_args **stack_b)
 {
