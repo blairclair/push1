@@ -16,11 +16,11 @@ void	split_to_b(t_args **stack_a, t_args **stack_b, int pos, int *check)
 {
 	if ((*stack_a)->arg >= pos)
 	{
-		call_exec(stack_a, stack_b, "ra");
+		call_exec(stack_a, stack_b, "ra", 1);
 		(*check)++;
 	}
 	else
-		call_exec(stack_a, stack_b, "pb");
+		call_exec(stack_a, stack_b, "pb", 1);
 }
 
 void	split(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr)
@@ -39,9 +39,9 @@ void	split(t_args **stack_a, t_args **stack_b, int highest, int *sorted_arr)
 	while (pos < check)
 	{
 		if ((*stack_b) && (*stack_b)->arg != get_highest_arg(*stack_b))
-			call_exec(stack_a, stack_b, "rrr");
+			call_exec(stack_a, stack_b, "rrr", 1);
 		else
-			call_exec(stack_a, stack_b, "rra");
+			call_exec(stack_a, stack_b, "rra", 1);
 		pos++;
 	}
 	if (get_lowest_arg(*stack_b) == get_value_after_last(*stack_a, sorted_arr,

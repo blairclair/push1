@@ -12,12 +12,12 @@
 
 #include "checker.h"
 
-int	is_dup(int *dup_check, int num, int numDup)
+int	is_dup(int *dup_check, int num, int num_dup)
 {
 	int i;
 
 	i = 0;
-	while (i < numDup)
+	while (i < num_dup)
 	{
 		if (dup_check[i] == num)
 		{
@@ -31,31 +31,46 @@ int	is_dup(int *dup_check, int num, int numDup)
 int	check_num(char **str, int *dup_check, int i)
 {
 	long long	num;
-	static int			numDup = 0;
+	static int	num_dup = 0;
 
 	while (str[i])
 	{
 		num = ft_atol(str[i]);
 		if (!ft_isnumber(str[i]) || num > 2147483647 ||
-		num < -2147483648 || !is_dup(dup_check, num, numDup))
+		num < -2147483648 || !is_dup(dup_check, num, num_dup))
 		{
 			return (0);
 		}
 		dup_check[i] = num;
-		numDup++;
+		num_dup++;
 		i++;
 	}
 	return (1);
 }
 
-int	is_safe(int argc, char *argv[])
+int	check_num_and_free(int argc, char **str, int ret, int is_string)
 {
 	int			*dup_check;
+
+	dup_check = ft_memalloc(argc * sizeof(int*) + 1);
+	if (!check_num(str, dup_check, 0))
+		ret = -1;
+	if (is_string)
+		free_two_d(str);
+	else
+		free(str);
+	free(dup_check);
+	return (ret);
+}
+
+int	is_safe(int argc, char *argv[])
+{
 	char		**str;
 	int			ret;
 	int			j;
-	int			isString;
-	j = 1;
+	int			is_string;
+
+	j = 0;
 	ret = 1;
 	if (argc < 2)
 		return (0);
@@ -64,22 +79,15 @@ int	is_safe(int argc, char *argv[])
 		str = ft_strsplit(argv[1], ' ');
 		argc = count_num_2d_args(str) + 1;
 		ret = 3;
-		isString = 1;
+		is_string = 1;
 	}
 	else
 	{
 		str = ft_memalloc(argc * sizeof(char*));
 		while (argv[j++])
 			str[j - 1] = argv[j];
-		isString = 0;
+		is_string = 0;
 	}
-	dup_check = ft_memalloc(argc * sizeof(int*) + 1);
-	if (!check_num(str, dup_check, 0))
-		ret = -1;
-	if (isString)
-		free_two_d(str);
-	else
-		free(str);	
-	free(dup_check);
+	ret = check_num_and_free(argc, str, ret, is_string);
 	return (ret);
 }

@@ -34,7 +34,6 @@ void	rot_up(t_args **stack_ab)
 	delete_node(stack_ab, 0);
 }
 
-
 void	rot_down(t_args **stack_ab)
 {
 	int		last_arg;

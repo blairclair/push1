@@ -24,7 +24,7 @@ static int		set_the_line(struct s_line *file_stuff)
 		buf[ret] = '\0';
         temp = file_stuff->buf;
 		file_stuff->buf = ft_strjoin(file_stuff->buf, buf);
-        free(temp);
+		free(temp);
 	}
     free(buf);
 	return (ret);
@@ -58,10 +58,11 @@ static int          get_the_line(struct s_line *file_stuff, char **line)
     char *tmp;
 	char	*tmp2;
 
-    i = -1;
+    i = 0;
+	tmp = NULL;
 	while (!(ft_strchr(file_stuff->buf, '\n')))
 	{
-        i  = set_the_line(file_stuff) + 1;
+        i  = set_the_line(file_stuff);
 		if (i < 0)
 			return (-1);
 		if (i == 0 && ((ft_strchr(file_stuff->buf, '\n') == 0)))
@@ -75,7 +76,7 @@ static int          get_the_line(struct s_line *file_stuff, char **line)
 	(ft_strchr(file_stuff->buf, '\n') - file_stuff->buf));
     tmp = file_stuff->buf;
 	tmp2 = ft_strchr(file_stuff->buf, '\n');
-	file_stuff->buf = tmp2 + 1;
+	file_stuff->buf = ft_strdup(tmp2 + 1);
 	free(tmp);
 	tmp = NULL;
     return (1);

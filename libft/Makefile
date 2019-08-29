@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC=gcc
-CFLAGS=-I -Wall -Werror -Wextra -c
+CFLAGS=-I -Wall -Werror -Wextra -c -g
 SRCS=ft_strtoupper.c\
  	ft_memset.c\
 	 ft_bzero.c\

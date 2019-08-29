@@ -6,7 +6,7 @@
 /*   By: agrodzin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 12:50:32 by agrodzin          #+#    #+#             */
-/*   Updated: 2019/08/28 12:50:36 by agrodzin         ###   ########.fr       */
+/*   Updated: 2019/08/28 17:29:32 by agrodzin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,33 +51,34 @@ int		check_if_done(t_args *stack_a)
 	return (1);
 }
 
-void    print_list(t_args *stack_a, t_args *stack_b)
+void	print_list(t_args *stack_a, t_args *stack_b)
 {
-    ft_printf("stack a:\n");
-    if (stack_a)
-    {
-        ft_printf("    num args: %d\n", stack_a->num_args);
-        while (stack_a)
-        {
-            ft_printf("%d\n", stack_a->arg);
-            stack_a = stack_a->next;
-        }
-    }
-    ft_printf("\nstack b:\n");
-    if (stack_b)
-    {
-        ft_printf("    num args: %d\n", stack_b->num_args);
-        while (stack_b)
-        {
-            ft_printf("%d\n", stack_b->arg);
-            stack_b = stack_b->next;
-        }
-    }
+	ft_printf("stack a:\n");
+	if (stack_a)
+	{
+		ft_printf("    num args: %d\n", stack_a->num_args);
+		while (stack_a)
+		{
+			ft_printf("%d\n", stack_a->arg);
+			stack_a = stack_a->next;
+		}
+	}
+	ft_printf("\nstack b:\n");
+	if (stack_b)
+	{
+		ft_printf("    num args: %d\n", stack_b->num_args);
+		while (stack_b)
+		{
+			ft_printf("%d\n", stack_b->arg);
+			stack_b = stack_b->next;
+		}
+	}
 }
 
 int		is_backwards(t_args *stack_a, int highest)
 {
 	int	tmp;
+
 	if (stack_a->arg != highest)
 		return (0);
 	while (stack_a)
@@ -90,7 +91,6 @@ int		is_backwards(t_args *stack_a, int highest)
 	}
 	return (1);
 }
-
 
 void	ps_lstdel(t_args **alst)
 {

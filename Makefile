@@ -16,12 +16,15 @@ CC=gcc
 CFLAGS= -Wall -Wextra -Werror -g 
 SRCS=checker.c
 SRCS2=push_swap.c\
+merge_sort.c\
+simple_sort.c\
 b_to_a.c\
 split.c\
 bigger_sort.c
 SRCS_COMBINE=utils.c\
 utils2.c\
 utils3.c\
+utils_4.c\
 init.c\
 check_params.c\
 call_exec.c\

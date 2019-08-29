@@ -64,7 +64,7 @@ int		get_average(t_args *stack_ab)
 	return ((int)(num / i + 0.5));
 }
 
-int	get_value_from_pos(t_args *stack_ab, int pos)
+int		get_value_from_pos(t_args *stack_ab, int pos)
 {
 	while (stack_ab && pos > 0)
 	{

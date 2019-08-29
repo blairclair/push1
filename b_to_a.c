@@ -20,22 +20,22 @@ void	small_b_to_a(t_args **stack_a, t_args **stack_b, int *sorted_arr)
 
 	highest_b = get_highest_arg(*stack_b);
 	if (highest_b == (*stack_b)->arg)
-		call_exec(stack_a, stack_b, "pa");
+		call_exec(stack_a, stack_b, "pa", 1);
 	else
 	{
 		check = VALUE_AFTER_LAST;
 		if ((*stack_b)->arg == check || (*stack_b)->arg == sorted_arr[0])
 		{
-			call_exec(stack_a, stack_b, "pa");
-			call_exec(stack_a, stack_b, "ra");
+			call_exec(stack_a, stack_b, "pa", 1);
+			call_exec(stack_a, stack_b, "ra", 1);
 		}
 		else
 		{
 			pos = get_pos_arg(*stack_b, get_highest_arg(*stack_b));
 			if (pos <= (*stack_b)->num_args / 2)
-				call_exec(stack_a, stack_b, "rrb");
+				call_exec(stack_a, stack_b, "rrb", 1);
 			else
-				call_exec(stack_a, stack_b, "rb");
+				call_exec(stack_a, stack_b, "rb", 1);
 		}
 	}
 }
@@ -46,17 +46,17 @@ int pivot, int *sorted_arr)
 	int	check;
 
 	if (pivot <= (*stack_b)->arg)
-		call_exec(stack_a, stack_b, "pa");
+		call_exec(stack_a, stack_b, "pa", 1);
 	else
 	{
 		check = VALUE_AFTER_LAST;
 		if ((*stack_b)->arg == check || (*stack_b)->arg == sorted_arr[0])
 		{
-			call_exec(stack_a, stack_b, "pa");
-			call_exec(stack_a, stack_b, "ra");
+			call_exec(stack_a, stack_b, "pa", 1);
+			call_exec(stack_a, stack_b, "ra", 1);
 		}
 		else
-			call_exec(stack_a, stack_b, "rb");
+			call_exec(stack_a, stack_b, "rb", 1);
 	}
 }
 

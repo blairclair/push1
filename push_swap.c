@@ -6,425 +6,44 @@
 /*   By: agrodzin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/19 15:06:10 by agrodzin          #+#    #+#             */
-/*   Updated: 2018/12/22 18:44:44 by agrodzin         ###   ########.fr       */
+/*   Updated: 2019/08/28 17:27:46 by agrodzin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int		get_highest_arg(t_args *stack_ab)
+void	push_swap_extra_simple_2(t_args **stack_a, t_args **stack_b)
 {
-	int	temp;
-
-	temp = 0;
-	if (stack_ab != NULL)
-	{
-		temp = stack_ab->arg;
-		while (stack_ab)
-		{
-			if (temp < stack_ab->arg)
-				temp = stack_ab->arg;
-			stack_ab = stack_ab->next;
-		}
-	}
-	return (temp);
+	call_exec(stack_a, stack_b, "pb", 1);
+	call_exec(stack_a, stack_b, "sa", 1);
+	call_exec(stack_a, stack_b, "pa", 1);
 }
 
-int		get_lowest_arg(t_args *stack_ab)
+void	push_swap_extra_simple(t_args **stack_a, t_args **stack_b)
 {
-	int	temp;
-
-	temp = 0;
-	if (stack_ab != NULL)
-	{
-		temp = stack_ab->arg;
-		while (stack_ab)
-		{
-			if (temp > stack_ab->arg)
-				temp = stack_ab->arg;
-			stack_ab = stack_ab->next;
-		}
-	}
-	return (temp);
-}
-
-int	get_unsorted_pos(t_args *stack_ab, int stack)//not zero based
-{
-	int	temp;
-	int	i;
-
-	i = 0;
-	if (stack_ab == NULL)
-		return (-1);
-	while (stack_ab)
-	{
-		temp = stack_ab->arg;
-		if (stack_ab->next)
-		{
-			if (temp > stack_ab->next->arg && stack == 1)
-				return (i + 1);
-			else if (temp < stack_ab->next->arg && stack == 2)
-				return (i + 1);
-		}
-		stack_ab = stack_ab->next;
-		i++;
-	}
-	return (i);
-}
-
-
-int		is_perfect_merge(t_args *stack_a, t_args *stack_b)
-{
-	int	temp;
-	int	first;
-
-	first = stack_a->arg;
-	while (stack_a)
-	{
-		if (!stack_a || !stack_a->next)
-		{
-			if (!stack_a->next)
-				temp = stack_a->arg;
-			break ;
-		}
-		if (stack_a->next != NULL)
-			temp = stack_a->next->arg;
-		if (temp < stack_a->arg)
-			return (0);
-		stack_a = stack_a->next;
-	}
-	if (stack_b->arg > first)
-		return (0);
-	while (stack_b->next)
-		stack_b = stack_b->next;
-	while (stack_b)
-	{
-		if (!stack_b || !stack_b->prev)
-			return (1);
-		if (stack_b->prev != NULL)
-			temp = stack_b->prev->arg;
-		if (temp < stack_b->arg)
-			return (0);
-		stack_b = stack_b->prev;
-	}
-	return (1);
-}
-
-void	do_merge(t_args **stack_a, t_args **stack_b)
-{
-	int	num_args;
-
-	num_args = 1;
-	while (((*stack_b)->next))
-	{
-		(*stack_b = (*stack_b)->next);
-		num_args++;
-	}
-	while ((*stack_b))
-		(*stack_b) = (*stack_b)->prev;
-	while (num_args > 0)
-	{
-		call_exec(stack_a, stack_b, "pa");
-		if (*stack_b)
-			(*stack_b) = (*stack_b)->next;
-		num_args--;
-	}
-}
-
-int		last_as_first_value(t_args *stack_ab, int lowest)
-{
-	while (stack_ab->next)
-		stack_ab = stack_ab->next;
-	if (stack_ab->arg == lowest)
-		return (1);
-	return (0);
-}
-
-int		check_stack_b(t_args *stack_b)
-{
-	int	temp;
-
-	if (!stack_b)
-		return (1);
-	while (stack_b)
-	{
-		if (!stack_b || !stack_b->next)
-			return (1);
-		if (stack_b->next != NULL)
-			temp = stack_b->next->arg;
-		if (temp > stack_b->arg)
-			return (0);
-		stack_b = stack_b->next;
-	}
-	return (1);
-}
-
-void	make_merge_perfect(t_args **stack_a, t_args **stack_b)
-{
-	int	lowest_a;
-	int	highest_b;
-
-	lowest_a = get_lowest_arg(*stack_a);
-	highest_b = get_highest_arg(*stack_b);
-	if (highest_b > lowest_a)
-	{
-		while (1)
-		{
-			call_exec(stack_a, stack_b, "pb");
-			lowest_a = get_lowest_arg(*stack_a);
-			highest_b = get_highest_arg(*stack_b);
-			if (highest_b < lowest_a)
-			{
-				resort_stack_b(stack_a, stack_b);
-				break ;
-			}
-		}
-	}
-	do_merge(stack_a, stack_b);
-}
-
-int		get_last_arg(t_args *stack_ab)
-{
-	if (stack_ab == NULL)
-		return (0);
-	while (stack_ab->next)
-		stack_ab = stack_ab->next;
-	return (stack_ab->arg);
-}
-
-void	resort_stack_b(t_args **stack_a, t_args **stack_b)
-{
-	int	pos;
-	int	lowest;
-	int	highest;
-	int	last;
-
-	while (1)
-	{
-		lowest = get_lowest_arg(*stack_b);
-		highest = get_highest_arg(*stack_b);
-		pos = get_unsorted_pos(*stack_b, 2);
-		last = get_last_arg(*stack_b);
-		if (check_stack_b(*stack_b))
-			break ;
-		else if ((*stack_b)->next && (*stack_b)->arg < (*stack_b)->next->arg)
-		{
-			if (*stack_a && (*stack_a)->next && (*stack_a)->arg > (*stack_a)->next->arg)
-				call_exec(stack_a, stack_b, "ss");
-			else
-				call_exec(stack_a, stack_b, "sb");
-		}
-		else if (last > (*stack_b)->arg)
-		{
-			if ((*stack_a) && get_last_arg(*stack_a) == get_lowest_arg(*stack_a))
-				call_exec(stack_a, stack_b, "rrr");
-			else
-				call_exec(stack_a, stack_b, "rrb");
-		}
-		else if ((*stack_b) && (*stack_b)->arg == lowest)
-		{
-			if ((*stack_a) && (*stack_a)->arg == get_highest_arg(*stack_a))
-				call_exec(stack_a, stack_b, "rr");
-			else
-				call_exec(stack_a, stack_b, "rb");
-		}
-		else if ((*stack_b)->arg == highest && (*stack_b)->arg < (*stack_a)->arg)
-			call_exec(stack_a, stack_b, "pa");
-		else
-			call_exec(stack_a, stack_b, "rrb");
-	}
-}
-
-int		choose_rot(t_args *stack_a, int lowest)
-{
-	int	i;
-
-	i = 0;
-	while (stack_a)
-	{
-		if (stack_a->arg == lowest)
-			break ; 
-		i++;
-		stack_a = stack_a->next;
-	}
-	if (i > stack_a->num_args / 2)
-	{
-		return(2);
-	}
-	return (1);
-}
-
-int		should_merge(t_args **stack_a, t_args **stack_b)
-{
-	if (check_if_done(*stack_a) && (*stack_b) == NULL)
-	{
-		return (1);
-	}
-	if (check_if_done((*stack_a)) && (*stack_b))
-	{
-		if (is_perfect_merge(*stack_a, *stack_b))
-			do_merge(stack_a, stack_b);
-		else
-			make_merge_perfect(stack_a, stack_b);
-		return (1);
-	}
-	return (0);
-}
-
-int		get_loc_arg(t_args *stack_a, int arg)
-{
-	int	loc;
-
-	loc = 0;
-	while (stack_a)
-	{
-		if (stack_a->arg == arg)
-			return loc;
-		stack_a = stack_a->next;
-		loc++;
-	}
-	return loc;
-}
-
-void	rot_to_top_simple(t_args **stack_a, t_args **stack_b, int loc)
-{
-	int	half_size;
-	int	i;
-
-	i = 0;
-	half_size = (*stack_a)->num_args / 2;
-	if (loc < half_size)
-	{
-		while (i < loc)
-		{
-			call_exec(stack_a, stack_b, "ra");
-			i++;
-		}
-	}
+	if ((*stack_a)->num_args == 2)
+		call_exec(stack_a, stack_b, "sa", 1);
 	else
 	{
-		while (i < (*stack_a)->num_args - loc)
+		if ((*stack_a)->arg > (*stack_a)->next->arg &&
+				(*stack_a)->next->arg < (*stack_a)->next->next->arg)
+			call_exec(stack_a, stack_b, "sa", 1);
+		else if ((*stack_a)->arg < (*stack_a)->next->arg &&
+				(*stack_a)->next->arg > (*stack_a)->next->next->arg &&
+				(*stack_a)->arg < (*stack_a)->next->next->arg)
 		{
-			call_exec(stack_a, stack_b, "rra");
-			i++;
+			push_swap_extra_simple_2(stack_a, stack_b);
 		}
-	}
-}
-
-int		push_swap_simple(t_args **stack_a, t_args **stack_b)
-{
-	int	lowest;
-
-	while (1){
-		lowest = get_lowest_arg(*stack_a);
-		if (check_if_done(*stack_a) && *stack_b == NULL)
-			return (1);
-		if (should_merge(stack_a, stack_b))
-			return (1);
-		if ((*stack_a)->arg == lowest){
-			call_exec(stack_a, stack_b, "pb");
-		}
-		else
-			rot_to_top_simple(stack_a, stack_b, get_loc_arg(*stack_a, lowest));
-	}
-}
-
-void	merge(int nums[], int left, int middle, int right)
-{
-	int	i;
-	int	j;
-	int	k;
-	int	temp1[middle - left + 1];
-	int	temp2[right - middle];
-
-	j = -1;
-	i = -1;
-	while (++i < (middle - left + 1))
-		temp1[i] = nums[left + i];
-	while (++j < (right - middle))
-		temp2[j] = nums[middle + 1 + j];
-	i = 0;
-	j = 0;
-	k = left;
-	while (i < (middle - left + 1) && j < (right - middle))
-	{
-		if (temp1[i] <= temp2[j])
+		else if ((*stack_a)->arg > (*stack_a)->next->arg &&
+				(*stack_a)->next->arg > (*stack_a)->next->next->arg)
 		{
-			nums[k] = temp1[i];
-			i++;
+			call_exec(stack_a, stack_b, "ra", 1);
+			call_exec(stack_a, stack_b, "sa", 1);
 		}
-		else
-		{
-			nums[k] = temp2[j];
-			j++;
-		}
-		k++;
-	}
-	while (i < (middle - left + 1))
-	{
-		nums[k] = temp1[i];
-		k++;
-		i++;
-	}
-	while (j < right - middle)
-	{
-		nums[k] = temp2[j];
-		j++;
-		k++;
-	}
-}
-
-void	merge_sort(int nums[], int left, int right)
-{
-	int middle;
-
-	if (left < right)
-	{
-		middle = left + (right - left) / 2;
-		merge_sort(nums, left, middle);
-		merge_sort(nums, middle + 1, right);
-		merge(nums, left, middle, right);
-	}
-}
-int		*actual_sort(t_args *stack_a)
-{
-	int	*nums;
-	int	len;
-	int	i;
-
-	len = 0;
-	i = 0;
-	nums = ft_memalloc(stack_a->num_args * sizeof(int*) + 5);
-	while (stack_a)
-	{
-		nums[len] = stack_a->arg;
-		len++;
-		stack_a = stack_a->next;
-	}
-	nums[len + 1] = '\0';
-	merge_sort(nums, 0, len - 1);
-	return (nums);
-}
-
-void	push_swap_extra_simple(t_args **stack_a, t_args **stack_b){
-	if ((*stack_a)->num_args == 2)
-		call_exec(stack_a, stack_b, "sa");
-	else{
-		if ((*stack_a)->arg > (*stack_a)->next->arg && (*stack_a)->next->arg < (*stack_a)->next->next->arg)
-			call_exec(stack_a, stack_b, "sa");
-		else if ((*stack_a)->arg < (*stack_a)->next->arg && (*stack_a)->next->arg > (*stack_a)->next->next->arg && (*stack_a)->arg < (*stack_a)->next->next->arg)
-		{
-			call_exec(stack_a, stack_b, "pb");
-			call_exec(stack_a, stack_b, "sa");
-			call_exec(stack_a, stack_b, "pa");
-		}
-		else if ((*stack_a)->arg  > (*stack_a)->next->arg && (*stack_a)->next->arg > (*stack_a)->next->next->arg)
-		{
-			call_exec(stack_a, stack_b, "ra");
-			call_exec(stack_a, stack_b, "sa");
-		}
-		else if ((*stack_a)->arg < (*stack_a)->next->arg && (*stack_a)->next->arg > (*stack_a)->next->next->arg && (*stack_a)->arg > (*stack_a)->next->next->arg)
-			call_exec(stack_a, stack_b, "rra");
+		else if ((*stack_a)->arg < (*stack_a)->next->arg &&
+				(*stack_a)->next->arg > (*stack_a)->next->next->arg &&
+				(*stack_a)->arg > (*stack_a)->next->next->arg)
+			call_exec(stack_a, stack_b, "rra", 1);
 	}
 }
 
@@ -449,9 +68,9 @@ void	push_swap(t_args *stack_a, t_args *stack_b)
 
 int		main(int argc, char *argv[])
 {
-	t_args  *stack_a;
-	t_args  *stack_b;
-	int     check;
+	t_args	*stack_a;
+	t_args	*stack_b;
+	int		check;
 	char	**str;
 	int		i;
 
@@ -467,14 +86,11 @@ int		main(int argc, char *argv[])
 	else if (check == 3)
 	{
 		str = ft_strsplit(argv[1], ' ');
-    	init_stack_a(&stack_a, count_num_2d_args(str), str, 0);	
+		init_stack_a(&stack_a, count_num_2d_args(str), str, 0);
 		free_two_d(str);
 	}
 	else
 		init_stack_a(&stack_a, argc - 1, argv, 1);
 	push_swap(stack_a, stack_b);
-	// if (stack_a)
-	// 	ps_lstdel(&stack_a);
-	// sleep(30);
 	return (0);
 }

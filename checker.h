@@ -22,7 +22,7 @@ typedef struct		s_args
     struct s_args	*next;
     struct s_args	*prev;
 }					t_args;
-
+int					ret_stack_b(t_args *stack_b, int temp);
 int                 get_average_highest(t_args *stack_ab, int highest, int lowest);
 int                 get_pos_arg(t_args *stack_ab, int arg);
 void	            split_to_b(t_args **stack_a, t_args **stack_b, int pos, int *check);
@@ -44,11 +44,9 @@ void    			get_input(t_args **stack_a, t_args **stack_b);
 int					check_if_done(t_args *stack_a);
 void				print_list(t_args *stack_a, t_args *stack_b);
 void				delete_node(t_args **head, int n);
-void				resort_stack_b(t_args **stack_a, t_args **stack_b);
 void				init_stack_a(t_args **stack_a, int num_args, char *argv[], int i);
-void				call_exec(t_args **stack_a, t_args **stack_b, char *choice);
+void				call_exec(t_args **stack_a, t_args **stack_b, char *choice, int push_check);
 void				push_swap(t_args *stack_a, t_args *stack_b);
-int					get_last_arg(t_args *stack_ab);
 int					get_lowest_arg(t_args *stack_ab);
 int					get_highest_arg(t_args *stack_ab);
 void				stack_a_sort(t_args **stack_a, t_args **stack_b);
@@ -62,4 +60,6 @@ void				go_to_a(t_args **stack_a, t_args **stack_b, int *sorted_arr);
 int					get_pos_no_one(t_args *stack_a, int arg, int lowest);
 int					*actual_sort(t_args *stack_a);
 int					get_value_after_last(t_args *stack_ab, int *sorted_arr, int num_args);
+int		            is_perfect_merge(t_args *stack_a, t_args *stack_b);
+int                 push_swap_simple(t_args **stack_a, t_args **stack_b);
 #endif

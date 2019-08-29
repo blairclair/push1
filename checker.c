@@ -1,48 +1,62 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checker.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agrodzin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/28 17:14:13 by agrodzin          #+#    #+#             */
+/*   Updated: 2019/08/28 17:14:14 by agrodzin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "checker.h"
 
-int		loc_char(char *str, char c){
+int		loc_char(char *str, char c)
+{
 	int	i;
+
 	i = 0;
 	while (str[i])
 	{
 		if (str[i] == c)
-			return i;
+			return (i);
 		i++;
 	}
-	return -1;
+	return (-1);
 }
 
 void	swap_cmds(char buf[5], t_args **stack_a, t_args **stack_b)
 {
 	if (!ft_strcmp(buf, "sa"))
-		call_exec(stack_a, stack_b, "sa");
+		call_exec(stack_a, stack_b, "sa", 0);
 	else if (!ft_strcmp(buf, "sb"))
-		call_exec(stack_a, stack_b, "sb");
+		call_exec(stack_a, stack_b, "sb", 0);
 	else if (!ft_strcmp(buf, "ss"))
-		call_exec(stack_a, stack_b, "ss");
+		call_exec(stack_a, stack_b, "ss", 0);
 	else if (!ft_strcmp(buf, "pb"))
-		call_exec(stack_a, stack_b, "pb");
+		call_exec(stack_a, stack_b, "pb", 0);
 	else if (!ft_strcmp(buf, "pa"))
-		call_exec(stack_a, stack_b, "pa");
+		call_exec(stack_a, stack_b, "pa", 0);
 	else if (!ft_strcmp(buf, "ra"))
-		call_exec(stack_a, stack_b, "ra");
+		call_exec(stack_a, stack_b, "ra", 0);
 	else if (!ft_strcmp(buf, "rb"))
-		call_exec(stack_a, stack_b, "rb");
+		call_exec(stack_a, stack_b, "rb", 0);
 	else if (!ft_strcmp(buf, "rr"))
-		call_exec(stack_a, stack_b, "rr");
+		call_exec(stack_a, stack_b, "rr", 0);
 	else if (!ft_strcmp(buf, "rra"))
-		call_exec(stack_a, stack_b, "rra");
+		call_exec(stack_a, stack_b, "rra", 0);
 	else if (!ft_strcmp(buf, "rrb"))
-		call_exec(stack_a, stack_b, "rrb");
+		call_exec(stack_a, stack_b, "rrb", 0);
 	else if (!ft_strcmp(buf, "rrr"))
-		call_exec(stack_a, stack_b, "rrr");
+		call_exec(stack_a, stack_b, "rrr", 0);
 	else
 		ft_putstr_fd("Error\n", 2);
 }
 
-void    get_input(t_args **stack_a, t_args **stack_b)
+void	get_input(t_args **stack_a, t_args **stack_b)
 {
-	char    *line;
+	char	*line;
 	int		ret;
 
 	while ((ret = get_next_line(0, &line)))
@@ -55,13 +69,17 @@ void    get_input(t_args **stack_a, t_args **stack_b)
 		ft_printf("OK\n");
 	else
 		ft_printf("KO\n");
+	if (stack_a)
+		ps_lstdel(stack_a);
+	if (stack_b)
+		ps_lstdel(stack_b);
 }
 
-int main(int argc, char *argv[])
+int		main(int argc, char *argv[])
 {
-	t_args  *stack_a;
-	t_args  *stack_b;
-	int     check;
+	t_args	*stack_a;
+	t_args	*stack_b;
+	int		check;
 	char	**str;
 
 	stack_b = NULL;
@@ -70,7 +88,6 @@ int main(int argc, char *argv[])
 	{
 		if (check == -1)
 			ft_putstr_fd("Error\n", 2);
-			// sleep(30);
 		return (0);
 	}
 	else if (check == 3)
@@ -82,11 +99,5 @@ int main(int argc, char *argv[])
 	else
 		init_stack_a(&stack_a, argc - 1, argv, 1);
 	get_input(&stack_a, &stack_b);
-	if (stack_a)
-		ps_lstdel(&stack_a);
-	if (stack_b)
-		ps_lstdel(&stack_b);
-	// printf("arg: %d\n", stack_a->arg);
-	sleep(30);
 	return (0);
 }

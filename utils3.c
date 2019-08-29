@@ -6,7 +6,7 @@
 /*   By: agrodzin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 11:08:57 by agrodzin          #+#    #+#             */
-/*   Updated: 2019/08/28 11:08:59 by agrodzin         ###   ########.fr       */
+/*   Updated: 2019/08/28 17:30:54 by agrodzin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,32 +42,33 @@ int		get_pos_arg(t_args *stack_ab, int arg)
 	return (pos);
 }
 
-void delete_node(t_args **head, int n) 
+void	delete_node(t_args **head, int n)
 {
-	t_args* tmp = *head; 
-   	int		i;
-	t_args	*nextTmp;
+	t_args	*tmp;
+	int		i;
+	t_args	*next_tmp;
+
 	i = 0;
-	if (*head == NULL) 
-	   return; 
-    if (n == 0) 
-    { 
-        *head = tmp->next; 
-        free(tmp);  
-        return; 
-    } 
+	tmp = *head;
+	if (*head == NULL)
+		return ;
+	if (n == 0)
+	{
+		*head = tmp->next;
+		free(tmp);
+		return ;
+	}
 	while (i < n && tmp != NULL)
 	{
 		tmp = tmp->next;
 		i++;
 	}
-	if (tmp == NULL || tmp->next == NULL) 
-         return; 
-   	nextTmp = tmp->next->next; 
-    free(tmp->next);
-    tmp->next = nextTmp;   
-} 
-
+	if (tmp == NULL || tmp->next == NULL)
+		return ;
+	next_tmp = tmp->next->next;
+	free(tmp->next);
+	tmp->next = next_tmp;
+}
 
 void	add_to_beginning(t_args **head, int num_args, int arg)
 {
@@ -81,4 +82,22 @@ void	add_to_beginning(t_args **head, int num_args, int arg)
 	if ((*head) != NULL)
 		(*head)->prev = new_node;
 	(*head) = new_node;
+}
+
+int		get_highest_arg(t_args *stack_ab)
+{
+	int	temp;
+
+	temp = 0;
+	if (stack_ab != NULL)
+	{
+		temp = stack_ab->arg;
+		while (stack_ab)
+		{
+			if (temp < stack_ab->arg)
+				temp = stack_ab->arg;
+			stack_ab = stack_ab->next;
+		}
+	}
+	return (temp);
 }
