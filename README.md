@@ -20,3 +20,9 @@ any duplicates.
   * rra : reverse rotate a - shift down all elements of stack a by 1. The last element becomes the first one.
   * rrb : reverse rotate b - shift down all elements of stack b by 1. The last element becomes the first one.
   * rrr : rra and rrb at the same time.
+
+Usage
+------------------------
+launch the push swap executable with  a list of integers. ex ```./push_swap 3 2 832 9 78```
+The most optimized list of steps will be returned. 
+To check that the steps are correct pipe them into the check executable ex ```ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker $ARG```
